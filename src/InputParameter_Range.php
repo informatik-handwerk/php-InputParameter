@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Command\InputParameter;
+namespace ihde\php\InputParameter;
 
 abstract class InputParameter_Range extends InputParameter
 {

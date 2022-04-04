@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Command\InputParameter\Impl;
+namespace ihde\php\InputParameter\Impl;
 
-use App\Command\InputParameter\InputParameter_Range;
-use App\Command\InputParameter\StringParser;
+use ihde\php\InputParameter\InputParameter_Range;
+use ihde\php\InputParameter\StringParser;
 
 class InputParameter_Range_Date extends InputParameter_Range
 {

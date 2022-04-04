@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Command\InputParameter;
+namespace ihde\php\InputParameter;
 
-use App\Command\InputTransformer\Instantiable_KeyValue;
+use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
 
 abstract class InputParameter implements Instantiable_KeyValue
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Command\InputParameter\Impl;
+namespace ihde\php\InputParameter\Impl;
 
-use App\Command\InputParameter\InputParameter_Range;
+use ihde\php\InputParameter\InputParameter_Range;
 
 class InputParameter_Range_PositiveInt extends InputParameter_Range
 {

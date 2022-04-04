@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Command\InputParameter\Impl;
+namespace ihde\php\InputParameter\Impl;
 
-use App\Command\InputParameter\InputParameter_Single;
-use App\Command\InputParameter\StringParser;
+use ihde\php\InputParameter\InputParameter_Single;
+use ihde\php\InputParameter\StringParser;
 
 class InputParameter_Single_PositiveInt extends InputParameter_Single
 {

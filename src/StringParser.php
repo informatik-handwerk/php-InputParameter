@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Command\InputParameter;
+namespace ihde\php\InputParameter;
 
-class StringParser
+final class StringParser
 {
     public const SPLITTER_list = ",";
     public const SPLITTER_range = "..";

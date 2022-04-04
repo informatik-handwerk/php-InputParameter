@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Command\InputParameter\Impl;
+namespace ihde\php\InputParameter\Impl;
 
-use App\Command\InputParameter\InputParameter_List;
+use ihde\php\InputParameter\InputParameter_List;
 
 class InputParameter_List_Date extends InputParameter_List
 {

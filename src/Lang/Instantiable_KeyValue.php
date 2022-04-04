@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Command\InputTransformer;
+namespace ihde\php\InputParameter\Lang;
 
 interface Instantiable_KeyValue
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Command\InputParameter\Impl;
+namespace ihde\php\InputParameter\Impl;
 
-use App\Command\InputParameter\InputParameter;
-use App\Command\InputParameter\InputParameter_List;
-use App\Command\InputParameter\StringParser;
+use ihde\php\InputParameter\InputParameter;
+use ihde\php\InputParameter\InputParameter_List;
+use ihde\php\InputParameter\StringParser;
 
 class InputParameter_List_PositiveInt extends InputParameter_List
 {
