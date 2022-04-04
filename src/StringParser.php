@@ -42,11 +42,11 @@ final class StringParser
         
         if (\is_int($asInt)) {
             $asDate = (new \DateTimeImmutable())->setTimestamp($asInt);
-    
+            
             // @codeCoverageIgnoreStart
             { //paranoia
                 $asTimestamp = $asDate->getTimestamp();
-    
+                
                 if ($asInt !== $asTimestamp || $input !== (string)$asTimestamp) {
                     throw new \InvalidArgumentException(
                         \sprintf(
