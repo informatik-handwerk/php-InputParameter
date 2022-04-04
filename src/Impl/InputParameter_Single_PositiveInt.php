@@ -9,7 +9,9 @@ use ihde\php\InputParameter\StringParser;
 
 class InputParameter_Single_PositiveInt
     extends InputParameter_Single {
-    protected int $value;
+    
+    protected string $value;
+    protected int $valueTyped;
     
     /**
      * @param string $name
@@ -17,13 +19,21 @@ class InputParameter_Single_PositiveInt
      */
     public function __construct(string $name, string $input) {
         parent::__construct($name);
-        $this->value = StringParser::parse_positiveInt($input);
+        $this->value = $input;
+        $this->valueTyped = StringParser::parse_positiveInt($this->value);
     }
     
     /**
      * @return int
      */
     public function getValue(): int {
+        return $this->valueTyped;
+    }
+    
+    /**
+     * @return string
+     */
+    public function __toString(): string {
         return $this->value;
     }
     

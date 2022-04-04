@@ -8,6 +8,7 @@ use ihde\php\InputParameter\InputParameter_Single;
 
 class InputParameter_Single_String
     extends InputParameter_Single {
+    
     protected string $value;
     
     /**
@@ -23,6 +24,13 @@ class InputParameter_Single_String
      * @return string
      */
     public function getValue(): string {
+        return $this->value;
+    }
+    
+    /**
+     * @return string
+     */
+    public function __toString(): string {
         return $this->value;
     }
     
