@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
-namespace ihde\php\InputParameter;
+namespace ihde\php\InputParameter\Symfony;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\CompositeExpression;
 use Doctrine\Common\Collections\Expr\Expression;
+use ihde\php\InputParameter\InputParameter;
+use ihde\php\InputParameter\InputParameter_List;
+use ihde\php\InputParameter\InputParameter_Range;
+use ihde\php\InputParameter\InputParameter_Single;
 
 class SymfonyDoctrineBridge
 {

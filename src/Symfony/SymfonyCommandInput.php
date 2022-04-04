@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ihde\php\InputParameter;
+namespace ihde\php\InputParameter\Symfony;
 
+use ihde\php\InputParameter\InputParameter;
 use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
 use Symfony\Component\Console\Input\InputInterface;
 
