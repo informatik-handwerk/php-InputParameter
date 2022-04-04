@@ -15,6 +15,7 @@ final class StringParser
     /**
      * @param string $input
      * @return int
+     * @throws \InvalidArgumentException
      */
     public static function parse_positiveInt(string $input): int {
         $asInt = \filter_var($input, \FILTER_VALIDATE_INT);
@@ -127,10 +128,11 @@ final class StringParser
      * @return bool
      */
     public static function containsStandalone(string $input): bool {
-        $posSeparatorList = \mb_strpos($input, self::SPLITTER_list);
-        $posSeparatorRange = \mb_strpos($input, self::SPLITTER_range);
-
-        return $posSeparatorList === false && $posSeparatorRange === false;
+        if (self::containsList($input) || self::containsRange($input)) {
+            return false;
+        }
+        
+        return true;
     }
     
     /**
