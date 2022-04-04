@@ -10,7 +10,7 @@ final class StringParser
     extends StaticAPI {
     
     public const SPLITTER_list = ",";
-    public const SPLITTER_range = "..";
+    public const SPLITTER_range = ".."; //do not change without understanding/testing the code.
     
     /**
      * @param string $input
@@ -87,12 +87,39 @@ final class StringParser
      * @param string $input
      * @return bool
      */
-    public static function containsRange(string $input): bool
-    {
-        $posSeparatorList = \mb_strpos($input, self::SPLITTER_list);
-        $posSeparatorRange = \mb_strpos($input, self::SPLITTER_range);
-
-        return $posSeparatorList === false && $posSeparatorRange !== false;
+    public static function containsRange(string $input): bool {
+        if (self::containsList($input)) {
+            return false;
+        }
+        
+        if ($input === self::SPLITTER_range) { //special case of `\count($parts) === 2`
+            return false;
+        }
+        
+        $parts = \explode(self::SPLITTER_range, $input);
+        if (\count($parts) > 2) {
+            return false;
+        }
+        
+        /*
+        //also possible
+        $join = \implode("", $parts);
+        if ($join === "") {
+            return false;
+        }
+        */
+        
+        if ($parts[0] === $input) { //implied `\count($parts) === 1`
+            return false;
+        }
+        
+        $partStartSuffix = \mb_substr($parts[0], -1);
+        $partEndPrefix = \mb_substr($parts[1] ?? "", 0, 1);
+        if ($partStartSuffix === "." || $partEndPrefix === ".") {
+            return false;
+        }
+        
+        return true;
     }
     
     /**
@@ -123,19 +150,10 @@ final class StringParser
      * @return string[]
      */
     public static function splitRange(string $input): array {
+        assert(self::containsRange($input));
+        
         $split = \explode(self::SPLITTER_range, $input);
         $split[1] = $split[1] ?? "";
-
-        if (\count($split) !== 2) {
-            throw new \InvalidArgumentException(
-                \sprintf(
-                    "Unexpected split by '%s' resulting in %s!==2 segments.",
-                    self::SPLITTER_range,
-                    \count($split)
-                )
-            );
-        }
-
         $trimmed = \array_map("trim", $split);
         $nulled = \array_map(static fn(string $s) => ($s === "") ? null : $s, $trimmed);
         
