@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace ihde\php\InputParameter;
 
+use ihde\php\InputParameter\Lang\StaticAPI;
+
 final class StringParser
+  extends StaticAPI
 {
     public const SPLITTER_list = ",";
     public const SPLITTER_range = "..";
