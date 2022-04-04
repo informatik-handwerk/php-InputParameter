@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace ihde\php\InputParameter\Symfony;
 
 use ihde\php\InputParameter\InputParameter;
-use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
 use Symfony\Component\Console\Input\InputInterface;
 
 class SymfonyCommandInput
 {
-    /** @var string[] $map_optionName_transformerClass */
+    /** @var string[]|InputParameter[] $map_optionName_transformerClass */
     protected array $map_optionName_transformerClass;
+    /** @var InputParameter[]|InputParameter[][] */
     protected array $input;
 
     /**
-     * @param InputInterface $inputBag
-     * @param array $map_optionName_transformerClass
+     * @param InputInterface            $inputBag
+     * @param string[]|InputParameter[] $map_optionName_transformerClass
      * @throws \Exception
      */
     public function __construct(InputInterface $inputBag, array $map_optionName_transformerClass)
@@ -26,8 +26,8 @@ class SymfonyCommandInput
     }
 
     /**
-     * @param InputInterface $inputBag
-     * @param string[] $map_optionName_transformerClass InputTransformer::class
+     * @param InputInterface            $inputBag
+     * @param string[]|InputParameter[] $map_optionName_transformerClass InputTransformer::class
      * @return array
      * @throws \Exception
      */
@@ -49,15 +49,16 @@ class SymfonyCommandInput
     /**
      * Caller is responsible for fetching input and persisting transformed result.
      *
-     * @param string $name
-     * @param string|array $inputSupplied
-     * @param string $transformerClass
-     * @return array|mixed
+     * @param string                $name
+     * @param string|array          $inputSupplied
+     * @param string|InputParameter $transformerClass
+     * @return InputParameter|InputParameter[]
+     * @throws \Exception
      */
     protected static function transform_oneInput(string $name, $inputSupplied, string $transformerClass)
     {
-        assert(\is_a($transformerClass, Instantiable_KeyValue::class, true));
 
+        assert(\is_a($transformerClass, InputParameter::class, true));
         if (\is_array($inputSupplied)) {
             $inputTransformed = \array_map(
                 static fn(string $eachInputSupplied) => $transformerClass::instance_keyValue(
@@ -69,13 +70,13 @@ class SymfonyCommandInput
         } else {
             $inputTransformed = $transformerClass::instance_keyValue($name, $inputSupplied);
         }
-
-        return $inputTransformed; //ok to push value to null - bumps up to array
+        
+        return $inputTransformed;
     }
 
     /**
      * @param string $name
-     * @return array|mixed
+     * @return InputParameter|InputParameter[]
      */
     public function getOneInput(string $name)
     {
@@ -84,7 +85,7 @@ class SymfonyCommandInput
     }
 
     /**
-     * @return array
+     * @return InputParameter[]|InputParameter[][]
      */
     public function getAllInputs(): array
     {
@@ -99,11 +100,10 @@ class SymfonyCommandInput
         $collector = [];
 
         foreach ($this->input as $name => $input) {
-            if ($input instanceof InputParameter) {
+            if (!\is_array($input)) {
                 $input = [$input];
             }
-
-            assert(\is_array($input));
+            
             foreach ($input as $inputParameter) {
                 assert($inputParameter instanceof InputParameter);
                 assert($inputParameter->getName() === $name);

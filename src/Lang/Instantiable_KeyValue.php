@@ -12,7 +12,7 @@ interface Instantiable_KeyValue
      * @param $value
      * @return object
      */
-    public static function instance_keyValue($key, $value);
+    public static function instance_keyValue($key, $value): object;
 
 
 }
