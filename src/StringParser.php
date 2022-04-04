@@ -34,7 +34,7 @@ final class StringParser
     /**
      * @param string $input
      * @return \DateTimeImmutable
-     * @throws \Exception
+     * @throws \InvalidArgumentException|\Exception
      */
     public static function parse_date(string $input): \DateTimeImmutable {
         $asInt = \filter_var($input, \FILTER_VALIDATE_INT);
@@ -42,6 +42,7 @@ final class StringParser
         if (\is_int($asInt)) {
             $asDate = (new \DateTimeImmutable())->setTimestamp($asInt);
     
+            // @codeCoverageIgnoreStart
             { //paranoia
                 $asTimestamp = $asDate->getTimestamp();
     
@@ -56,9 +57,17 @@ final class StringParser
                     );
                 }
             }
+            // @codeCoverageIgnoreEnd
         } else {
-            $asDate = new \DateTimeImmutable($input);
+            if ($input[0] === "@") {
+                //ensure we do not land in +0 time zone just because...
+                $inputTrim = \substr_replace($input, "", 0, 1);
+                $inputInt = \filter_var($inputTrim, \FILTER_VALIDATE_INT);
+                $asDate = (new \DateTimeImmutable())->setTimestamp($inputInt);
                 
+            } else {
+                $asDate = new \DateTimeImmutable($input);
+            }
             
         }
         
