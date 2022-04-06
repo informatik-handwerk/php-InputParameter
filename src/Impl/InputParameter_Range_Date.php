@@ -18,7 +18,7 @@ class InputParameter_Range_Date
      * @param InputParameter_Single_Date|null $upperBound
      * @throws \InvalidArgumentException
      */
-    protected function __construct(
+    public function __construct(
         string $name,
         $seed,
         ?InputParameter_Single_Date $lowerBound,
