@@ -163,46 +163,5 @@ final class StringParser
     }
     
     
-    /**
-     * @param string $input
-     * @param bool   $midnight
-     * @param string $intervalString
-     * @return string
-     * @throws \InvalidArgumentException|\Exception
-     */
-    public static function ensureIsDateRange(
-        string $input,
-        bool $midnight = true,
-        string $intervalString = "P1D"
-    ): string {
-        if (self::containsRange($input)) {
-            $split = self::splitRange($input);
-            foreach ($split as &$item) {
-                if ($item !== null) {
-                    $item = self::parse_date($item)
-                        ->getTimestamp();
-                }
-            }
-            return \implode(self::SPLITTER_range, $split);
-        }
-        
-        if (self::containsStandalone($input)) {
-            $date = self::parse_date($input);
-            
-            $dateFrom = $midnight
-                ? $date->setTime(0, 0, 0)
-                : $date;
-            $dateTo = $dateFrom->add(new \DateInterval($intervalString));
-            
-            $result = $dateFrom->getTimestamp() . self::SPLITTER_range . $dateTo->getTimestamp();
-            
-            assert(self::containsRange($result));
-            return $result;
-        }
-        
-        throw new \InvalidArgumentException("Could not convert to date range: '$input'");
-    }
-    
-    
 }
 

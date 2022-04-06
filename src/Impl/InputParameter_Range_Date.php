@@ -30,6 +30,27 @@ class InputParameter_Range_Date
     }
     
     /**
+     * @param \DateTimeImmutable $date
+     * @param bool               $midnight
+     * @param string             $intervalString
+     * @return \DateTimeImmutable[]
+     * @throws \Exception
+     */
+    public static function toRange(
+        \DateTimeImmutable $date,
+        bool $midnight = true,
+        string $intervalString = "P1D"
+    ): array {
+        $dateFrom = $midnight
+            ? $date->setTime(0, 0, 0)
+            : $date;
+        $dateTo = $dateFrom->add(new \DateInterval($intervalString));
+        
+        $result = [$dateFrom, $dateTo];
+        return $result;
+    }
+    
+    /**
      * @param                         $name
      * @param \DateTimeImmutable|null $lowerBound
      * @param \DateTimeImmutable|null $upperBound
@@ -42,7 +63,7 @@ class InputParameter_Range_Date
         ?\DateTimeImmutable $upperBound
     ): InputParameter_Range_Date {
         $seed = [$lowerBound, $upperBound];
-    
+        
         $instanceLowerBound = ($lowerBound === null)
             ? null
             : InputParameter_Single_Date::instance_keyValue($name, $lowerBound);
@@ -60,7 +81,19 @@ class InputParameter_Range_Date
      * @throws \InvalidArgumentException|\Exception
      */
     public static function instance_keyValue($key, $value): self {
-        $range = StringParser::splitRange($value);
+        if (StringParser::containsStandalone($value)) {
+            $date = StringParser::parse_date($value);
+            $range = self::toRange($date);
+            $instance = new static(
+                $key,
+                $value,
+                InputParameter_Single_Date::instance_direct($key, $range[0]),
+                InputParameter_Single_Date::instance_direct($key, $range[1]),
+            );
+            return $instance;
+        }
+        
+        $range = StringParser::splitRange($value); //(StringParser::containsRange($value);
         [$rawLowerBound, $rawUpperBound] = $range;
         
         $lowerBound = ($rawLowerBound === null)
