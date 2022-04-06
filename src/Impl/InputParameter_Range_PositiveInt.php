@@ -5,57 +5,88 @@ declare(strict_types = 1);
 namespace ihde\php\InputParameter\Impl;
 
 use ihde\php\InputParameter\InputParameter_Range;
+use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
+use ihde\php\InputParameter\StringParser;
 
 class InputParameter_Range_PositiveInt
     extends InputParameter_Range {
-    protected ?InputParameter_Single_PositiveInt $lowerBoundParam = null;
-    protected ?InputParameter_Single_PositiveInt $upperBoundParam = null;
     
     /**
-     * @throws \Exception
-     */
-    public function __construct(string $name, string $input) {
-        parent::__construct($name, $input);
-    
-        if ($this->hasLowerBound()) {
-            $this->lowerBoundParam = new InputParameter_Single_PositiveInt($name, $this->rawLowerBound);
-        }
-        if ($this->hasUpperBound()) {
-            $this->upperBoundParam = new InputParameter_Single_PositiveInt($name, $this->rawUpperBound);
-        }
-        
-        $this->_validate();
-    }
-    
-    /**
+     * @param string                                 $name
+     * @param                                        $seed
+     * @param InputParameter_Single_PositiveInt|null $lowerBound
+     * @param InputParameter_Single_PositiveInt|null $upperBound
      * @throws \InvalidArgumentException
      */
-    protected function _validate(): void {
-        $lowerBound = $this->lowerBoundParam ?? $this->upperBoundParam;
-        $upperBound = $this->upperBoundParam ?? $this->lowerBoundParam;
+    protected function __construct(
+        string $name,
+        $seed,
+        ?InputParameter_Single_PositiveInt $lowerBound,
+        ?InputParameter_Single_PositiveInt $upperBound
+    ) {
+        parent::__construct($name, $seed, $lowerBound, $upperBound);
+    }
+    
+    /**
+     * @param          $name
+     * @param int|null $lowerBound
+     * @param int|null $upperBound
+     * @return InputParameter_Range_PositiveInt
+     * @throws \InvalidArgumentException
+     */
+    public static function instance_direct(
+        $name,
+        ?int $lowerBound,
+        ?int $upperBound
+    ): InputParameter_Range_PositiveInt {
+        $seed = $lowerBound . StringParser::SPLITTER_range . $upperBound;
         
-        if ($lowerBound > $upperBound) {
-            //null-null pair also fails
-            throw new \InvalidArgumentException("Lower bound expected to smaller-equal to the upper.");
-        }
+        $instanceLowerBound = ($lowerBound === null)
+            ? null
+            : InputParameter_Single_PositiveInt::instance_direct($name, $lowerBound);
+        $instanceUpperBound = ($upperBound === null)
+            ? null
+            : InputParameter_Single_PositiveInt::instance_direct($name, $upperBound);
+        
+        $instance = new static($name, $seed, $instanceLowerBound, $instanceUpperBound);
+        return $instance;
     }
     
     /**
-     * Fails if null, call ->has*Bound() before
-     * @return InputParameter_Single_PositiveInt
+     * @implements Instantiable_KeyValue
+     * @inheritDoc
+     * @throws \InvalidArgumentException
      */
-    public function getLowerBound(): InputParameter_Single_PositiveInt {
-        return $this->lowerBoundParam;
+    public static function instance_keyValue($key, $value): self {
+        $range = StringParser::splitRange($value);
+        [$rawLowerBound, $rawUpperBound] = $range;
+        
+        $lowerBound = ($rawLowerBound === null)
+            ? null
+            : InputParameter_Single_PositiveInt::instance_keyValue($key, $rawLowerBound);
+        $upperBound = ($rawUpperBound === null)
+            ? null
+            : InputParameter_Single_PositiveInt::instance_keyValue($key, $rawUpperBound);
+        
+        $instance = new static($key, $value, $lowerBound, $upperBound);
+        return $instance;
     }
     
     /**
-     * Fails if null, call ->has*Bound() before
-     * @return InputParameter_Single_PositiveInt
+     * @inheritDoc
+     * @return int
      */
-    public function getUpperBound(): InputParameter_Single_PositiveInt {
-        return $this->upperBoundParam;
+    public function getLowerBound(): int {
+        return $this->lowerBound->getValue();
     }
     
+    /**
+     * @inheritDoc
+     * @return int
+     */
+    public function getUpperBound(): int {
+        return $this->upperBound->getValue();
+    }
     
 }
 

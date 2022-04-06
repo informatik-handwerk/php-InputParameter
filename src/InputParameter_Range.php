@@ -6,33 +6,71 @@ namespace ihde\php\InputParameter;
 
 abstract class InputParameter_Range
     extends InputParameter {
-    protected string $rawInput;
-    protected ?string $rawLowerBound = null;
-    protected ?string $rawUpperBound = null;
+    
+    protected ?InputParameter_Single $lowerBound;
+    protected ?InputParameter_Single $upperBound;
     
     /**
-     * @param string $input examples: "20..30", "2021-05-01..", "..now"
+     * @param string                     $name
+     * @param                            $seed
+     * @param InputParameter_Single|null $lowerBound
+     * @param InputParameter_Single|null $upperBound
+     * @throws \InvalidArgumentException
      */
-    public function __construct(string $name, string $input) {
-        parent::__construct($name);
-    
-        $this->rawInput = $input;
-        $range = StringParser::splitRange($input);
-        [$this->rawLowerBound, $this->rawUpperBound] = $range;
+    protected function __construct(
+        string $name,
+        $seed,
+        ?InputParameter_Single $lowerBound,
+        ?InputParameter_Single $upperBound
+    ) {
+        parent::__construct($name, $seed);
+        
+        $this->lowerBound = $lowerBound;
+        $this->upperBound = $upperBound;
+        
+        $this->_validate();
     }
+    
+    /**
+     * @throws \InvalidArgumentException
+     */
+    protected function _validate(): void {
+        $lowerBound = ($this->lowerBound === null)
+            ? null
+            : $this->lowerBound->getValue();
+        $upperBound = ($this->upperBound === null)
+            ? null
+            : $this->upperBound->getValue();
+        
+        $lowerBound = $lowerBound ?? $upperBound;
+        $upperBound = $upperBound ?? $lowerBound;
+        
+        if ($lowerBound > $upperBound) {
+            //null-null pair also fails
+            throw new \InvalidArgumentException("Lower bound expected to smaller-equal to the upper.");
+        }
+    }
+
+//    /**
+//     * @param     $name
+//     * @param     $lowerBound
+//     * @param     $upperBound
+//     * @return InputParameter_Range
+//     */
+//    abstract public static function instance_direct($name, $lowerBound, $upperBound): InputParameter_Range;
     
     /**
      * @return bool
      */
     public function hasLowerBound(): bool {
-        return $this->rawLowerBound !== null;
+        return $this->lowerBound !== null;
     }
     
     /**
      * @return bool
      */
     public function hasUpperBound(): bool {
-        return $this->rawUpperBound !== null;
+        return $this->upperBound !== null;
     }
     
     /**
@@ -55,10 +93,7 @@ abstract class InputParameter_Range
             return $this->seed;
         }
         
-        $asString = \implode(
-            StringParser::SPLITTER_range,
-            [$this->rawLowerBound, $this->rawUpperBound]
-        );
+        $asString = $this->lowerBound->__toString() . StringParser::SPLITTER_range . $this->upperBound->__toString();
         return $asString;
     }
     
