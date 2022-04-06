@@ -142,7 +142,7 @@ final class StringParser
     public static function splitList(string $input): array {
         $split = \explode(self::SPLITTER_list, $input);
         $trimmed = \array_map("trim", $split);
-        $filtered = \array_filter($trimmed);
+        $filtered = \array_filter($trimmed, static fn (string $s) => $s !== "");
         
         return $filtered;
     }

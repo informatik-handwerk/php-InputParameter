@@ -26,6 +26,7 @@ class InputParameter_Range_DateTest
      */
     public function provideInstantiationStrings(): array {
         return [
+            "0" => ["0"],
             "after 0" => ["0" . StringParser::SPLITTER_range],
             "until now" => ["0" . StringParser::SPLITTER_range],
             "0 to now" => ["0" . StringParser::SPLITTER_range . "now"],

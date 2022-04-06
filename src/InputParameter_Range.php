@@ -6,6 +6,7 @@ namespace ihde\php\InputParameter;
 
 abstract class InputParameter_Range
     extends InputParameter {
+    protected string $rawInput;
     protected ?string $rawLowerBound = null;
     protected ?string $rawUpperBound = null;
     
@@ -14,7 +15,8 @@ abstract class InputParameter_Range
      */
     public function __construct(string $name, string $input) {
         parent::__construct($name);
-        
+    
+        $this->rawInput = $input;
         $range = StringParser::splitRange($input);
         [$this->rawLowerBound, $this->rawUpperBound] = $range;
     }
@@ -49,6 +51,10 @@ abstract class InputParameter_Range
      * @return string
      */
     public function __toString(): string {
+        if (isset($this->rawInput)) {
+            return $this->rawInput;
+        }
+        
         $asString = \implode(
             StringParser::SPLITTER_range,
             [$this->rawLowerBound, $this->rawUpperBound]

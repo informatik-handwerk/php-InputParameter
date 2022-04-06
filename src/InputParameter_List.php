@@ -9,6 +9,7 @@ abstract class InputParameter_List
     implements \Countable {
     
     protected string $name;
+    protected string $rawString;
     protected array $rawList = [];
     
     /**
@@ -17,6 +18,7 @@ abstract class InputParameter_List
      */
     public function __construct(string $name, string $input) {
         parent::__construct($name);
+        $this->rawString = $input;
         $this->rawList = StringParser::splitList($input);
     }
     
@@ -45,6 +47,10 @@ abstract class InputParameter_List
      * @return string
      */
     public function __toString(): string {
+        if (isset($this->rawString)) {
+            return $this->rawString;
+        }
+        
         $asString = \implode(StringParser::SPLITTER_list, $this->rawList);
         return $asString;
     }

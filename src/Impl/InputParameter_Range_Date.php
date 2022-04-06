@@ -19,6 +19,8 @@ class InputParameter_Range_Date
         $inputAsRange = StringParser::ensureIsDateRange($input);
         
         parent::__construct($name, $inputAsRange);
+        $this->rawInput = $input;
+        
         $this->_validate();
         
         if ($this->hasLowerBound()) {
