@@ -35,8 +35,8 @@ class InputParameter_Range_Date
      * @throws \InvalidArgumentException
      */
     protected function _validate(): void {
-        $lowerBound = $this->rawLowerBound ?? $this->rawUpperBound;
-        $upperBound = $this->rawUpperBound ?? $this->rawLowerBound;
+        $lowerBound = $this->lowerBoundParam ?? $this->upperBoundParam;
+        $upperBound = $this->upperBoundParam ?? $this->lowerBoundParam;
         
         if ($lowerBound > $upperBound) {
             //null-null pair also fails

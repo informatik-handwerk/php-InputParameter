@@ -2,7 +2,6 @@
 
 namespace ihde\php\InputParameter\codeception;
 
-use DateTimeInterface;
 use ihde\php\InputParameter\StringParser;
 
 class StringParserTest
@@ -271,7 +270,7 @@ class StringParserTest
      * @return void
      */
     public function testDate(string $dateCandidate, bool $expectation): void {
-        $timezone= new \DateTimeZone(\date_default_timezone_get());
+        $timezone = new \DateTimeZone(\date_default_timezone_get());
         
         try {
             $date = StringParser::parse_date($dateCandidate);
@@ -328,11 +327,11 @@ class StringParserTest
         $now = static fn() => (new \DateTimeImmutable())->getTimestamp();
         
         $testSet = [0, $now()];
-        for ($i=0; $i<10; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $timestamp = \random_int(0, $now());
             $testSet[] = $timestamp;
         }
-    
+        
         foreach ($testSet as $timestamp) {
             $timestampInt = StringParser::parse_date((string)$timestamp);
             $timestampAtSign = StringParser::parse_date("@" . $timestamp);

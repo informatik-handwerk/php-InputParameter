@@ -5,20 +5,9 @@ namespace ihde\php\InputParameter\codeception\Impl;
 use ihde\php\InputParameter\Impl\InputParameter_Single_Date;
 
 class InputParameter_Single_DateTest
-    extends \Codeception\Test\Unit {
+    extends InputParameter_SingleTest {
     
-    public const KEY = "key";
-    
-    /**
-     * @var \ihde\php\InputParameter\codeception\UnitTester
-     */
-    protected $tester;
-    
-    protected function _before() {
-    }
-    
-    protected function _after() {
-    }
+    public const INPUT_PARAMETER_CLASS = InputParameter_Single_Date::class;
     
     /**
      * @return \string[][]
@@ -31,28 +20,6 @@ class InputParameter_Single_DateTest
             "date" => ["2022-12-31"],
             "datetime" => ["2022-12-31 23:59:02"],
         ];
-    }
-    
-    /**
-     * @dataProvider provideInstantiationStrings
-     * @param string $value
-     * @return void
-     * @throws \Exception
-     */
-    public function testInstantiate(string $value): void {
-        $instance = InputParameter_Single_Date::instance_keyValue(self::KEY, $value);
-        self::assertInstanceOf(InputParameter_Single_Date::class, $instance);
-    }
-    
-    /**
-     * @dataProvider provideInstantiationStrings
-     * @param string $value
-     * @return void
-     * @throws \Exception
-     */
-    public function testToStringStability(string $value): void {
-        $instance = InputParameter_Single_Date::instance_keyValue(self::KEY, $value);
-        self::assertSame($value, $instance->__toString());
     }
     
     

@@ -6,20 +6,9 @@ use ihde\php\InputParameter\Impl\InputParameter_List_PositiveInt;
 use ihde\php\InputParameter\StringParser;
 
 class InputParameter_List_PositiveIntTest
-    extends \Codeception\Test\Unit {
+    extends InputParameter_ListTest {
     
-    public const KEY = "key";
-    
-    /**
-     * @var \ihde\php\InputParameter\codeception\UnitTester
-     */
-    protected $tester;
-    
-    protected function _before() {
-    }
-    
-    protected function _after() {
-    }
+    public const INPUT_PARAMETER_CLASS = InputParameter_List_PositiveInt::class;
     
     /**
      * @return \string[][]
@@ -53,43 +42,6 @@ class InputParameter_List_PositiveIntTest
             "with range item" => [$listOf(["1..3", 4, 5]), 3],
             "four items, with padding" => [$listOf([1, 2, 3, 4], true), 4],
         ];
-    }
-    
-    /**
-     * @dataProvider provideInstantiationStrings
-     * @param string $value
-     * @return void
-     * @throws \Exception
-     */
-    public function testInstantiate(string $value): void {
-        $instance = InputParameter_List_PositiveInt::instance_keyValue(self::KEY, $value);
-        self::assertInstanceOf(InputParameter_List_PositiveInt::class, $instance);
-        self::assertSame(self::KEY, $instance->getName());
-    }
-    
-    /**
-     * @dataProvider provideInstantiationStrings
-     * @param string $value
-     * @return void
-     * @throws \Exception
-     */
-    public function testToStringStability(string $value): void {
-        $instance = InputParameter_List_PositiveInt::instance_keyValue(self::KEY, $value);
-        self::assertSame($value, $instance->__toString());
-    }
-    
-    /**
-     * @dataProvider provideInstantiationStrings
-     * @param string $value
-     * @param int    $size
-     * @return void
-     * @throws \Exception
-     */
-    public function testSize(string $value, int $size): void {
-        $instance = InputParameter_List_PositiveInt::instance_keyValue(self::KEY, $value);
-        self::assertSame($size !== 0, $instance->hasItems());
-        self::assertCount($size, $instance);
-        self::assertCount($size, $instance->getList());
     }
     
     

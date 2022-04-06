@@ -1,27 +1,15 @@
 <?php
+
 namespace ihde\php\InputParameter\codeception\Impl;
 
 use ihde\php\InputParameter\Impl\InputParameter_List_Date;
 use ihde\php\InputParameter\Impl\InputParameter_Range_Date;
 use ihde\php\InputParameter\StringParser;
 
-class InputParameter_List_DateTest extends \Codeception\Test\Unit
-{
+class InputParameter_List_DateTest
+    extends InputParameter_ListTest {
     
-    public const KEY = "key";
-    
-    /**
-     * @var \ihde\php\InputParameter\codeception\UnitTester
-     */
-    protected $tester;
-    
-    protected function _before()
-    {
-    }
-
-    protected function _after()
-    {
-    }
+    public const INPUT_PARAMETER_CLASS = InputParameter_List_Date::class;
     
     /**
      * @return \string[][]
@@ -64,37 +52,13 @@ class InputParameter_List_DateTest extends \Codeception\Test\Unit
      * @throws \Exception
      */
     public function testInstantiate(string $value): void {
+        parent::testInstantiate($value);
+        
         $instance = InputParameter_List_Date::instance_keyValue(self::KEY, $value);
-        self::assertInstanceOf(InputParameter_List_Date::class, $instance);
-        self::assertSame(self::KEY, $instance->getName());
-    
         foreach ($instance->getList() as $item) {
             self::assertInstanceOf(InputParameter_Range_Date::class, $item);
         }
     }
     
-    /**
-     * @dataProvider provideInstantiationStrings
-     * @param string $value
-     * @return void
-     * @throws \Exception
-     */
-    public function testToStringStability(string $value): void {
-        $instance = InputParameter_List_Date::instance_keyValue(self::KEY, $value);
-        self::assertSame($value, $instance->__toString());
-    }
     
-    /**
-     * @dataProvider provideInstantiationStrings
-     * @param string $value
-     * @param int    $size
-     * @return void
-     * @throws \Exception
-     */
-    public function testSize(string $value, int $size): void {
-        $instance = InputParameter_List_Date::instance_keyValue(self::KEY, $value);
-        self::assertSame($size !== 0, $instance->hasItems());
-        self::assertCount($size, $instance);
-        self::assertCount($size, $instance->getList());
-    }
 }
