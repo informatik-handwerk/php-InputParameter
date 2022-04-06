@@ -26,10 +26,11 @@ class InputParameter_Range_Date
     ) {
         parent::__construct($name, $seed, $lowerBound, $upperBound);
         $this->_validate();
-
+        
     }
+    
     /**
-     * @param          $name
+     * @param                         $name
      * @param \DateTimeImmutable|null $lowerBound
      * @param \DateTimeImmutable|null $upperBound
      * @return InputParameter_Range_Date
@@ -40,13 +41,7 @@ class InputParameter_Range_Date
         ?\DateTimeImmutable $lowerBound,
         ?\DateTimeImmutable $upperBound
     ): InputParameter_Range_Date {
-        $stringLowerBound = ($lowerBound === null)
-            ? ""
-            : (string)$lowerBound->getTimestamp();
-        $stringUpperBound = ($upperBound === null)
-            ? ""
-            : (string)$upperBound->getTimestamp();
-        $seed = $stringLowerBound. StringParser::SPLITTER_range . $stringUpperBound;
+        $seed = [$lowerBound, $upperBound];
     
         $instanceLowerBound = ($lowerBound === null)
             ? null

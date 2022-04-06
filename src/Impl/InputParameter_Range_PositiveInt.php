@@ -39,8 +39,8 @@ class InputParameter_Range_PositiveInt
         ?int $lowerBound,
         ?int $upperBound
     ): InputParameter_Range_PositiveInt {
-        $seed = $lowerBound . StringParser::SPLITTER_range . $upperBound;
-        
+        $seed = [$lowerBound, $upperBound];
+    
         $instanceLowerBound = ($lowerBound === null)
             ? null
             : InputParameter_Single_PositiveInt::instance_direct($name, $lowerBound);

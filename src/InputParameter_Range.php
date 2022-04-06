@@ -89,7 +89,7 @@ abstract class InputParameter_Range
      * @return string
      */
     public function __toString(): string {
-        if ($this->seed !== null) {
+        if (\is_string($this->seed)) {
             return $this->seed;
         }
         
