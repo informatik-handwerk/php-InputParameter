@@ -2,6 +2,8 @@
 
 namespace ihde\php\InputParameter\codeception\Impl;
 
+require_once("InputParameter_SingleTest.php");
+
 use ihde\php\InputParameter\Impl\InputParameter_Single_Date;
 
 class InputParameter_Single_DateTest

@@ -2,6 +2,8 @@
 
 namespace ihde\php\InputParameter\codeception\Impl;
 
+require_once("InputParameter_RangeTest.php");
+
 use ihde\php\InputParameter\Impl\InputParameter_Range_PositiveInt;
 use ihde\php\InputParameter\StringParser;
 

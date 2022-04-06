@@ -2,6 +2,8 @@
 
 namespace ihde\php\InputParameter\codeception\Impl;
 
+require_once("InputParameter_ListTest.php");
+
 use ihde\php\InputParameter\Impl\InputParameter_List_PositiveInt;
 use ihde\php\InputParameter\StringParser;
 
