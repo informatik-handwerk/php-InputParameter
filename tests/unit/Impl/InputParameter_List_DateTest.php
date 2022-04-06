@@ -51,13 +51,14 @@ class InputParameter_List_DateTest
      * @return void
      * @throws \Exception
      */
-    public function testInstantiate(string $value): void {
-        parent::testInstantiate($value);
+    public function testInstantiate(string $value): InputParameter_List_Date {
+        $instance = parent::testInstantiate($value);
         
-        $instance = InputParameter_List_Date::instance_keyValue(self::KEY, $value);
         foreach ($instance->getList() as $item) {
             self::assertInstanceOf(InputParameter_Range_Date::class, $item);
         }
+        
+        return $instance;
     }
     
     

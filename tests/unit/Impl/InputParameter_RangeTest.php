@@ -19,24 +19,23 @@ abstract class InputParameter_RangeTest
      * @return void
      * @throws \Exception
      */
-    public function testInstantiate(string $value): void {
-        parent::testInstantiate($value);
-        
-        /** @var  $instance */
-        $instance = (static::INPUT_PARAMETER_CLASS)::instance_keyValue(self::KEY, $value);
+    public function testInstantiate(string $value): InputParameter_Range {
+        /** @var InputParameter_Range $instance */
+        $instance = parent::testInstantiate($value);
+    
         if (!$instance->hasLowerBound() || !$instance->hasUpperBound()) {
-            return;
+            return $instance;
         }
         
         $lower = $instance->getLowerBound();
         $upper = $instance->getUpperBound();
         
         if ($lower == $upper) {
-            return;
+            return $instance;
         }
         
         if (!StringParser::containsRange($value)) {
-            return;
+            return $instance;
         }
         
         try {
@@ -44,12 +43,13 @@ abstract class InputParameter_RangeTest
             $rangeInvalid = \array_reverse($range);
             $valueInvalid = \implode(StringParser::SPLITTER_range, $rangeInvalid);
             (static::INPUT_PARAMETER_CLASS)::instance_keyValue(self::KEY, $valueInvalid);
-            (static::INPUT_PARAMETER_CLASS)::instance_keyValue(self::KEY, $valueInvalid);
-            self::fail("was supposed to throw");
+            self::fail("expected throw");
             
         } catch (\InvalidArgumentException $iae) {
             //ok
         }
+        
+        return $instance;
     }
     
     /**

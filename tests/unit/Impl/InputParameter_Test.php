@@ -33,10 +33,12 @@ abstract class InputParameter_Test
      * @return void
      * @throws \Exception
      */
-    public function testInstantiate(string $value): void {
+    public function testInstantiate(string $value): InputParameter {
         $instance = (static::INPUT_PARAMETER_CLASS)::instance_keyValue(self::KEY, $value);
         self::assertInstanceOf(static::INPUT_PARAMETER_CLASS, $instance);
         self::assertSame(self::KEY, $instance->getName());
+        
+        return $instance;
     }
     
     /**
