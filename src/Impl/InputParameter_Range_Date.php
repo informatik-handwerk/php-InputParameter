@@ -51,6 +51,37 @@ class InputParameter_Range_Date
     }
     
     /**
+     * @param                                               $name
+     * @param \DateTimeImmutable|InputParameter_Single_Date $dateSource
+     * @param bool                                          $midnight
+     * @param string                                        $intervalString
+     * @return InputParameter_Range_Date
+     * @throws \InvalidArgumentException|\Exception
+     */
+    public static function instance_directSingle(
+        $name,
+        $dateSource,
+        bool $midnight = true,
+        string $intervalString = "P1D"
+    ): InputParameter_Range_Date {
+        if ($dateSource instanceof InputParameter_Single_Date) {
+            $date = $dateSource->getValue();
+        } elseif ($dateSource instanceof \DateTimeImmutable) {
+            $date = $dateSource;
+        } else {
+            throw new \InvalidArgumentException("unexpected tyepe");
+        }
+        
+        [$lowerBound, $upperBound] = self::toRange($date, $midnight, $intervalString);
+        
+        $instanceLowerBound = InputParameter_Single_Date::instance_direct($name, $lowerBound);
+        $instanceUpperBound = InputParameter_Single_Date::instance_direct($name, $upperBound);
+        
+        $instance = new static($name, $dateSource, $instanceLowerBound, $instanceUpperBound);
+        return $instance;
+    }
+    
+    /**
      * @param                         $name
      * @param \DateTimeImmutable|null $lowerBound
      * @param \DateTimeImmutable|null $upperBound
