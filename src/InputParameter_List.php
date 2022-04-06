@@ -47,10 +47,9 @@ abstract class InputParameter_List
      * @return string
      */
     public function __toString(): string {
-        if (isset($this->rawString)) {
-            return $this->rawString;
+        if (isset($this->seed)) {
+            return $this->seed;
         }
-        
         $asString = \implode(StringParser::SPLITTER_list, $this->rawList);
         return $asString;
     }

@@ -35,7 +35,11 @@ class InputParameter_Single_Date
      * @return string
      */
     public function __toString(): string {
-        return $this->value;
+        if (\is_string($this->seed))  {
+            return $this->seed;
+        }
+    
+        return (string)$this->value->getTimestamp();
     }
     
     

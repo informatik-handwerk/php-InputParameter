@@ -31,7 +31,7 @@ class InputParameter_Single_String
      * @return string
      */
     public function __toString(): string {
-        return $this->value;
+        return $this->seed;
     }
     
     

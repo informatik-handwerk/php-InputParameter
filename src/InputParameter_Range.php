@@ -51,8 +51,8 @@ abstract class InputParameter_Range
      * @return string
      */
     public function __toString(): string {
-        if (isset($this->rawInput)) {
-            return $this->rawInput;
+        if ($this->seed !== null) {
+            return $this->seed;
         }
         
         $asString = \implode(
