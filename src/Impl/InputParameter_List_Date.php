@@ -32,7 +32,7 @@ class InputParameter_List_Date
      * @return InputParameter_Range_Date[]
      */
     public function getList(): array {
-        return $this->list;
+        return parent::getList();
     }
     
     

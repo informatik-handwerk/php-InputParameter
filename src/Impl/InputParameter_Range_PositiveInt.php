@@ -16,14 +16,15 @@ class InputParameter_Range_PositiveInt
      */
     public function __construct(string $name, string $input) {
         parent::__construct($name, $input);
-        $this->_validate();
-        
+    
         if ($this->hasLowerBound()) {
             $this->lowerBoundParam = new InputParameter_Single_PositiveInt($name, $this->rawLowerBound);
         }
         if ($this->hasUpperBound()) {
             $this->upperBoundParam = new InputParameter_Single_PositiveInt($name, $this->rawUpperBound);
         }
+        
+        $this->_validate();
     }
     
     /**

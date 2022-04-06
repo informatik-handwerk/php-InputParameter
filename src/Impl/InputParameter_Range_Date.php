@@ -21,14 +21,14 @@ class InputParameter_Range_Date
         parent::__construct($name, $inputAsRange);
         $this->rawInput = $input;
         
-        $this->_validate();
-        
         if ($this->hasLowerBound()) {
             $this->lowerBoundParam = new InputParameter_Single_Date($name, $this->rawLowerBound);
         }
         if ($this->hasUpperBound()) {
             $this->upperBoundParam = new InputParameter_Single_Date($name, $this->rawUpperBound);
         }
+        
+        $this->_validate();
     }
     
     /**

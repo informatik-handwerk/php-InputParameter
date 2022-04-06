@@ -35,7 +35,7 @@ class InputParameter_List_PositiveInt
      * @return InputParameter[]
      */
     public function getList(): array {
-        return $this->list;
+        return parent::getList();
     }
     
     
