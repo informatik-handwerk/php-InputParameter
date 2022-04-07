@@ -35,19 +35,19 @@ class InputParameter_List_Date
                 continue;
             }
             
-            if (\is_string($item)) {
-                $list[] = InputParameter_Range_Date::instance_keyValue($name, $item);
+            if (\is_string($item) || \is_int($item)) {
+                $list[] = InputParameter_Range_Date::instance_keyValue($name, (string)$item);
                 continue;
             }
             
             if (\is_array($item)) {
-                $itemAsIP = \array_map(static function ($input) use ($name): InputParameter_Single_Date {
-                    if ($input instanceof InputParameter_Single_Date) {
+                $itemAsIP = \array_map(static function ($input) use ($name): ?InputParameter_Single_Date {
+                    if ($input === null || $input instanceof InputParameter_Single_Date) {
                         return $input;
                     }
                     
-                    if (\is_string($input)) {
-                        return InputParameter_Single_Date::instance_keyValue($name, $input);
+                    if (\is_string($input) || \is_int($input)) {
+                        return InputParameter_Single_Date::instance_keyValue($name, (string)$input);
                     } else {
                         return InputParameter_Single_Date::instance_direct($name, $input);
                     }
@@ -57,7 +57,9 @@ class InputParameter_List_Date
                 continue;
             }
             
+            // @codeCoverageIgnoreStart
             throw new \LogicException("Unexpected type");
+            // @codeCoverageIgnoreEnd
         }
         
         $instance = new static($name, $items, ...$list);

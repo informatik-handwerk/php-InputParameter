@@ -60,7 +60,7 @@ class InputParameter_Single_Date
             return $this->seed;
         }
         
-        return (string)$this->value->getTimestamp();
+        return "@" . $this->value->getTimestamp();
     }
     
     

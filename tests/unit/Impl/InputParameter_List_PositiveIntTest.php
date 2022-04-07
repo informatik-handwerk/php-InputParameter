@@ -46,5 +46,21 @@ class InputParameter_List_PositiveIntTest
         ];
     }
     
+    /**
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    public function testMultiTypeDirectInstantiation(): void {
+        $instance = InputParameter_List_PositiveInt::instance_direct(
+            self::KEY,
+            2,
+            "5",
+            "5..15",
+            [null,12],
+            [2,null],
+            [2,12],
+        );
+    }
+    
     
 }

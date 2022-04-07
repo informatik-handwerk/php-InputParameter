@@ -69,7 +69,9 @@ class InputParameter_Range_Date
         } elseif ($dateSource instanceof \DateTimeImmutable) {
             $date = $dateSource;
         } else {
+            // @codeCoverageIgnoreStart
             throw new \InvalidArgumentException("unexpected tyepe");
+            // @codeCoverageIgnoreEnd
         }
         
         [$lowerBound, $upperBound] = self::toRange($date, $midnight, $intervalString);
@@ -97,10 +99,10 @@ class InputParameter_Range_Date
         
         $instanceLowerBound = ($lowerBound === null)
             ? null
-            : InputParameter_Single_Date::instance_keyValue($name, $lowerBound);
+            : InputParameter_Single_Date::instance_direct($name, $lowerBound);
         $instanceUpperBound = ($upperBound === null)
             ? null
-            : InputParameter_Single_Date::instance_keyValue($name, $upperBound);
+            : InputParameter_Single_Date::instance_direct($name, $upperBound);
         
         $instance = new static($name, $seed, $instanceLowerBound, $instanceUpperBound);
         return $instance;

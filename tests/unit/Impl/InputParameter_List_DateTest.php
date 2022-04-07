@@ -6,6 +6,7 @@ require_once("InputParameter_ListTest.php");
 
 use ihde\php\InputParameter\Impl\InputParameter_List_Date;
 use ihde\php\InputParameter\Impl\InputParameter_Range_Date;
+use ihde\php\InputParameter\Impl\InputParameter_Single_Date;
 use ihde\php\InputParameter\StringParser;
 
 class InputParameter_List_DateTest
@@ -61,6 +62,27 @@ class InputParameter_List_DateTest
         }
         
         return $instance;
+    }
+    
+    /**
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    public function testMultiTypeDirectInstantiation(): void {
+        $instance = InputParameter_List_Date::instance_direct(
+            self::KEY,
+            "now",
+            0,
+            new \DateTimeImmutable(),
+            [null, "now"],
+            ["0", new \DateTimeImmutable()],
+            [0, 10],
+            InputParameter_Single_Date::instance_keyValue(self::KEY, "now"),
+            InputParameter_Range_Date::instance_keyValue(self::KEY, "..now"),
+            [null, "15"],
+            ["5", null],
+            ["5", "15"],
+        );
     }
     
     

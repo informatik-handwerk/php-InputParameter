@@ -30,17 +30,18 @@ class InputParameter_List_PositiveInt
                 continue;
             }
             
-            if (\is_int($item))  {
+            if (\is_int($item)) {
                 $list[] = InputParameter_Single_PositiveInt::instance_direct($name, $item);
                 continue;
             }
             
-            if (\is_array($item))  {
+            if (\is_array($item)) {
+                //expecting int
                 $list[] = InputParameter_Range_PositiveInt::instance_direct($name, ...$item);
                 continue;
             }
             
-            if (\is_string($item))  {
+            if (\is_string($item)) {
                 if (StringParser::containsRange($item)) {
                     $list[] = InputParameter_Range_PositiveInt::instance_keyValue($name, $item);
                     continue;
@@ -49,8 +50,9 @@ class InputParameter_List_PositiveInt
                     continue;
                 }
             }
-            
+            // @codeCoverageIgnoreStart
             throw new \InvalidArgumentException("Unexpected type");
+            // @codeCoverageIgnoreEnd
         }
         
         $instance = new static($name, $items, ...$list);
