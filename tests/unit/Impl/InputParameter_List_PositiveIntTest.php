@@ -2,6 +2,8 @@
 
 namespace ihde\php\InputParameter\codeception\Impl;
 
+require_once("InputParameter_ListTest.php");
+
 use ihde\php\InputParameter\Impl\InputParameter_List_PositiveInt;
 use ihde\php\InputParameter\StringParser;
 
@@ -42,6 +44,22 @@ class InputParameter_List_PositiveIntTest
             "with range item" => [$listOf(["1..3", 4, 5]), 3],
             "four items, with padding" => [$listOf([1, 2, 3, 4], true), 4],
         ];
+    }
+    
+    /**
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    public function testMultiTypeDirectInstantiation(): void {
+        $instance = InputParameter_List_PositiveInt::instance_direct(
+            self::KEY,
+            2,
+            "5",
+            "5..15",
+            [null,12],
+            [2,null],
+            [2,12],
+        );
     }
     
     

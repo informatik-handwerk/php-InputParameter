@@ -22,13 +22,27 @@ abstract class InputParameter_RangeTest
     public function testInstantiate(string $value): InputParameter_Range {
         /** @var InputParameter_Range $instance */
         $instance = parent::testInstantiate($value);
-    
+        
+        $instance2 = (static::INPUT_PARAMETER_CLASS)::instance_direct(
+            self::KEY,
+            $instance->hasLowerBound() ? $instance->getLowerBound() : null,
+            $instance->hasUpperBound() ? $instance->getUpperBound() : null
+        );
+        
+        self::assertInstanceOf(static::INPUT_PARAMETER_CLASS, $instance2);
+        self::assertSame(self::KEY, $instance2->getName());
+        
         if (!$instance->hasLowerBound() || !$instance->hasUpperBound()) {
             return $instance;
         }
         
         $lower = $instance->getLowerBound();
         $upper = $instance->getUpperBound();
+        $lower2 = $instance2->getLowerBound();
+        $upper2 = $instance2->getUpperBound();
+        
+        self::assertSame($lower, $lower2);
+        self::assertSame($upper, $upper2);
         
         if ($lower == $upper) {
             return $instance;

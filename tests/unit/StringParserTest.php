@@ -282,43 +282,6 @@ class StringParserTest
         }
     }
     
-    
-    /**
-     * @dataProvider provideDateTestables
-     * @param string $rangeAble
-     * @param bool   $expectation
-     * @return void
-     */
-    public function testMakeRangeWherePossible(string $rangeAble, bool $expectation): void {
-        $RE_outputFormat = "/^(\d*|-\d+)\.{2}(\d*|-\d+)$/u";
-        $processAndAssertOutputFormat = static function (string $input) use ($RE_outputFormat): void {
-            $output = StringParser::ensureIsDateRange($input);
-            self::assertRegExp($RE_outputFormat, $output);
-        };
-        
-        try {
-            $processAndAssertOutputFormat($rangeAble);
-            $processAndAssertOutputFormat($rangeAble . StringParser::SPLITTER_range);
-            $processAndAssertOutputFormat(StringParser::SPLITTER_range . $rangeAble);
-            $processAndAssertOutputFormat($rangeAble . StringParser::SPLITTER_range . $rangeAble);
-            StringParser::ensureIsDateRange($rangeAble);
-            
-        } catch (\Exception $e) {
-            self::assertFalse($expectation);
-        }
-    }
-    
-    /**
-     * @dataProvider provideInvalidRange
-     * @dataProvider provideListWithLength
-     * @dataProvider provideStandalone
-     * @param string $notRange
-     * @return void
-     */
-    public function testMakeRangeNotPossible(string $notRange): void {
-        $this->testMakeRangeWherePossible($notRange, false);
-    }
-    
     /**
      * @return void
      * @throws \Exception

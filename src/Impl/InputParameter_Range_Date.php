@@ -5,59 +5,155 @@ declare(strict_types = 1);
 namespace ihde\php\InputParameter\Impl;
 
 use ihde\php\InputParameter\InputParameter_Range;
+use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
 use ihde\php\InputParameter\StringParser;
 
 class InputParameter_Range_Date
     extends InputParameter_Range {
-    protected ?InputParameter_Single_Date $lowerBoundParam = null;
-    protected ?InputParameter_Single_Date $upperBoundParam = null;
     
     /**
-     * @throws \Exception
-     */
-    public function __construct(string $name, string $input) {
-        $inputAsRange = StringParser::ensureIsDateRange($input);
-        
-        parent::__construct($name, $inputAsRange);
-        $this->rawInput = $input;
-        
-        if ($this->hasLowerBound()) {
-            $this->lowerBoundParam = new InputParameter_Single_Date($name, $this->rawLowerBound);
-        }
-        if ($this->hasUpperBound()) {
-            $this->upperBoundParam = new InputParameter_Single_Date($name, $this->rawUpperBound);
-        }
-        
-        $this->_validate();
-    }
-    
-    /**
+     * @param string                          $name
+     * @param                                 $seed
+     * @param InputParameter_Single_Date|null $lowerBound
+     * @param InputParameter_Single_Date|null $upperBound
      * @throws \InvalidArgumentException
      */
-    protected function _validate(): void {
-        $lowerBound = $this->lowerBoundParam ?? $this->upperBoundParam;
-        $upperBound = $this->upperBoundParam ?? $this->lowerBoundParam;
+    public function __construct(
+        string $name,
+        $seed,
+        ?InputParameter_Single_Date $lowerBound,
+        ?InputParameter_Single_Date $upperBound
+    ) {
+        parent::__construct($name, $seed, $lowerBound, $upperBound);
+        $this->_validate();
         
-        if ($lowerBound > $upperBound) {
-            //null-null pair also fails
-            throw new \InvalidArgumentException("Lower bound expected to smaller-equal to the upper.");
-        }
     }
     
     /**
-     * Fails if null, call ->has*Bound() before
+     * @param \DateTimeImmutable $date
+     * @param bool               $midnight
+     * @param string             $intervalString
+     * @return \DateTimeImmutable[]
+     * @throws \Exception
+     */
+    public static function toRange(
+        \DateTimeImmutable $date,
+        bool $midnight = true,
+        string $intervalString = "P1D"
+    ): array {
+        $dateFrom = $midnight
+            ? $date->setTime(0, 0, 0)
+            : $date;
+        $dateTo = $dateFrom->add(new \DateInterval($intervalString));
+        
+        $result = [$dateFrom, $dateTo];
+        return $result;
+    }
+    
+    /**
+     * @param                                               $name
+     * @param \DateTimeImmutable|InputParameter_Single_Date $dateSource
+     * @param bool                                          $midnight
+     * @param string                                        $intervalString
+     * @return InputParameter_Range_Date
+     * @throws \InvalidArgumentException|\Exception
+     */
+    public static function instance_directSingle(
+        $name,
+        $dateSource,
+        bool $midnight = true,
+        string $intervalString = "P1D"
+    ): InputParameter_Range_Date {
+        if ($dateSource instanceof InputParameter_Single_Date) {
+            $date = $dateSource->getValue();
+        } elseif ($dateSource instanceof \DateTimeImmutable) {
+            $date = $dateSource;
+        } else {
+            // @codeCoverageIgnoreStart
+            throw new \InvalidArgumentException("unexpected tyepe");
+            // @codeCoverageIgnoreEnd
+        }
+        
+        [$lowerBound, $upperBound] = self::toRange($date, $midnight, $intervalString);
+        
+        $instanceLowerBound = InputParameter_Single_Date::instance_direct($name, $lowerBound);
+        $instanceUpperBound = InputParameter_Single_Date::instance_direct($name, $upperBound);
+        
+        $instance = new static($name, $dateSource, $instanceLowerBound, $instanceUpperBound);
+        return $instance;
+    }
+    
+    /**
+     * @param                         $name
+     * @param \DateTimeImmutable|null $lowerBound
+     * @param \DateTimeImmutable|null $upperBound
+     * @return InputParameter_Range_Date
+     * @throws \InvalidArgumentException|\Exception
+     */
+    public static function instance_direct(
+        $name,
+        ?\DateTimeImmutable $lowerBound,
+        ?\DateTimeImmutable $upperBound
+    ): InputParameter_Range_Date {
+        $seed = [$lowerBound, $upperBound];
+        
+        $instanceLowerBound = ($lowerBound === null)
+            ? null
+            : InputParameter_Single_Date::instance_direct($name, $lowerBound);
+        $instanceUpperBound = ($upperBound === null)
+            ? null
+            : InputParameter_Single_Date::instance_direct($name, $upperBound);
+        
+        $instance = new static($name, $seed, $instanceLowerBound, $instanceUpperBound);
+        return $instance;
+    }
+    
+    /**
+     * @implements Instantiable_KeyValue
+     * @inheritDoc
+     * @throws \InvalidArgumentException|\Exception
+     */
+    public static function instance_keyValue($key, $value): self {
+        if (StringParser::containsStandalone($value)) {
+            $date = StringParser::parse_date($value);
+            $range = self::toRange($date);
+            $instance = new static(
+                $key,
+                $value,
+                InputParameter_Single_Date::instance_direct($key, $range[0]),
+                InputParameter_Single_Date::instance_direct($key, $range[1]),
+            );
+            return $instance;
+        }
+        
+        $range = StringParser::splitRange($value); //(StringParser::containsRange($value);
+        [$rawLowerBound, $rawUpperBound] = $range;
+        
+        $lowerBound = ($rawLowerBound === null)
+            ? null
+            : InputParameter_Single_Date::instance_keyValue($key, $rawLowerBound);
+        $upperBound = ($rawUpperBound === null)
+            ? null
+            : InputParameter_Single_Date::instance_keyValue($key, $rawUpperBound);
+        
+        $instance = new static($key, $value, $lowerBound, $upperBound);
+        return $instance;
+    }
+    
+    /**
+     * @inheritDoc
      * @return \DateTimeImmutable
      */
     public function getLowerBound(): \DateTimeImmutable {
-        return $this->lowerBoundParam->getValue();
+        return $this->lowerBound->getValue();
     }
     
     /**
-     * Fails if null, call ->has*Bound() before
+     * @inheritDoc
      * @return \DateTimeImmutable
      */
     public function getUpperBound(): \DateTimeImmutable {
-        return $this->upperBoundParam->getValue();
+        return $this->upperBound->getValue();
     }
     
     

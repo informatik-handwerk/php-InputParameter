@@ -8,19 +8,25 @@ abstract class InputParameter_List
     extends InputParameter
     implements \Countable {
     
-    protected string $name;
-    protected string $rawString;
-    protected array $rawList = [];
+    /** @var InputParameter[] $list */
+    protected array $list;
     
     /**
-     * @param string $input examples: "20, 30", "20,30", "20", "20,, ,30,"
-     * @throws \Exception
+     * @param string         $name
+     * @param                $seed
+     * @param InputParameter ...$items
      */
-    public function __construct(string $name, string $input) {
-        parent::__construct($name);
-        $this->rawString = $input;
-        $this->rawList = StringParser::splitList($input);
+    protected function __construct(string $name, $seed, InputParameter ...$items) {
+        parent::__construct($name, $seed);
+        $this->list = $items;
     }
+    
+    /**
+     * @param $name
+     * @param ...$items
+     * @return InputParameter_List
+     */
+    abstract public static function instance_direct($name, ...$items): self;
     
     /**
      * @return bool
@@ -33,7 +39,7 @@ abstract class InputParameter_List
      * @return int
      */
     public function count(): int {
-        return \count($this->rawList);
+        return \count($this->list);
     }
     
     /**
@@ -47,11 +53,11 @@ abstract class InputParameter_List
      * @return string
      */
     public function __toString(): string {
-        if (isset($this->rawString)) {
-            return $this->rawString;
+        if (\is_string($this->seed)) {
+            return $this->seed;
         }
         
-        $asString = \implode(StringParser::SPLITTER_list, $this->rawList);
+        $asString = \implode(StringParser::SPLITTER_list, $this->list); //->__toString()
         return $asString;
     }
     

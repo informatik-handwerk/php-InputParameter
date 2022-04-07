@@ -8,24 +8,18 @@ use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
 
 abstract class InputParameter
     implements Instantiable_KeyValue {
+    
     protected string $name;
+    /** @var ?string|mixed $seed */
+    protected $seed;
     
     /**
      * @param string $name
+     * @param        $seed
      */
-    public function __construct(string $name) {
+    protected function __construct(string $name, $seed) {
         $this->name = $name;
-    }
-    
-    /**
-     * @param $key
-     * @param $value
-     * @return static
-     * @throws \Exception
-     */
-    public static function instance_keyValue($key, $value): self {
-        $instance = new static($key, $value);
-        return $instance;
+        $this->seed = $seed;
     }
     
     /**
