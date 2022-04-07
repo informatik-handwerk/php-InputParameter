@@ -1,0 +1,4 @@
+actor: UnitTester
+modules:
+    enabled:
+        - \ihde\php\InputParameter\codeception\Helper\Unit

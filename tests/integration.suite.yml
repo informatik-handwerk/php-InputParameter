@@ -1,0 +1,4 @@
+actor: IntegrationTester
+modules:
+    enabled:
+        - \ihde\php\InputParameter\codeception\Helper\Integration

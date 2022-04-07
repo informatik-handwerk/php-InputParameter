@@ -1,0 +1,34 @@
+{
+	"name": "ihde/input-parameter",
+	"require": {
+		"php": ">=7.4.0",
+		"doctrine/collections": "*",
+		"symfony/console": "*"
+	},
+	"require-dev": {
+		"codeception/codeception": "^4.1"
+	},
+	"config": {
+		"sort-packages": true,
+		"process-timeout": 2000,
+		"platform": {
+		}
+	},
+	"minimum-stability": "stable",
+	"prefer-stable": true,
+	"repositories": [
+	],
+	"autoload": {
+		"psr-4": {
+			"ihde\\php\\InputParameter\\": "src/"
+		},
+		"files": [
+		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+		},
+		"files": [
+		]
+	}
+}
