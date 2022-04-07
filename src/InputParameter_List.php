@@ -56,7 +56,7 @@ abstract class InputParameter_List
         if (\is_string($this->seed)) {
             return $this->seed;
         }
-    
+        
         $asString = \implode(StringParser::SPLITTER_list, $this->list); //->__toString()
         return $asString;
     }

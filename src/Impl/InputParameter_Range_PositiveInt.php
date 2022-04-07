@@ -40,7 +40,7 @@ class InputParameter_Range_PositiveInt
         ?int $upperBound
     ): InputParameter_Range_PositiveInt {
         $seed = [$lowerBound, $upperBound];
-    
+        
         $instanceLowerBound = ($lowerBound === null)
             ? null
             : InputParameter_Single_PositiveInt::instance_direct($name, $lowerBound);

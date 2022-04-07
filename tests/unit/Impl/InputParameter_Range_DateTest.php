@@ -19,7 +19,7 @@ class InputParameter_Range_DateTest
         return [
             "0" => ["0"],
             "after 0" => ["0" . StringParser::SPLITTER_range],
-            "until now" => ["0" . StringParser::SPLITTER_range],
+            "until now" => [StringParser::SPLITTER_range. "now"],
             "0 to now" => ["0" . StringParser::SPLITTER_range . "now"],
         ];
     }

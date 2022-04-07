@@ -56,10 +56,10 @@ class InputParameter_Single_Date
      * @return string
      */
     public function __toString(): string {
-        if (\is_string($this->seed))  {
+        if (\is_string($this->seed)) {
             return $this->seed;
         }
-    
+        
         return (string)$this->value->getTimestamp();
     }
     
