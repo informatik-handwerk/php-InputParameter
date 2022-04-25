@@ -137,7 +137,7 @@ class SymfonyBridge_DoctrineCommonCollection {
 
         if ($param->hasUpperBound()) {
             $expressions[] = Criteria::expr()
-                ->lte($columnName, $param->getUpperBound());
+                ->lt($columnName, $param->getUpperBound());
         }
 
         if (\count($expressions) === 1) {
