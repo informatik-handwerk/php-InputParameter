@@ -8,11 +8,11 @@ use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
 
 abstract class InputParameter
     implements Instantiable_KeyValue {
-    
+
     protected string $name;
     /** @var ?string|mixed $seed */
     protected $seed;
-    
+
     /**
      * @param string $name
      * @param        $seed
@@ -21,14 +21,22 @@ abstract class InputParameter
         $this->name = $name;
         $this->seed = $seed;
     }
-    
+
     /**
      * @return string
      */
     public function getName(): string {
         return $this->name;
     }
-    
-    
+
+    /**
+     * @param InputParameter ...$parameters
+     * @return string
+     */
+    public static function stringify(InputParameter ...$parameters): string  {
+        $result = \implode(" ", $parameters);  //->__toString()
+        return $result;
+    }
+
 }
 

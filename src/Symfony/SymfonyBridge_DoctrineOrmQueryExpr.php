@@ -123,7 +123,7 @@ class SymfonyBridge_DoctrineOrmQueryExpr
 
         if ($param->hasUpperBound()) {
             $expressions[] = $this->exprFactory
-                ->lte($columnName, $param->getUpperBound());
+                ->lt($columnName, $param->getUpperBound());
         }
 
         if (\count($expressions) === 1) {
