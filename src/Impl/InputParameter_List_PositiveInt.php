@@ -7,10 +7,12 @@ namespace ihde\php\InputParameter\Impl;
 use ihde\php\InputParameter\InputParameter;
 use ihde\php\InputParameter\InputParameter_List;
 use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
+use ihde\php\InputParameter\Lang\Type_InputParameter_PositiveInt;
 use ihde\php\InputParameter\StringParser;
 
 class InputParameter_List_PositiveInt
-    extends InputParameter_List {
+    extends InputParameter_List
+    implements Type_InputParameter_PositiveInt {
     
     /** @var InputParameter_Single_PositiveInt[]|InputParameter_Range_PositiveInt[] $list */
     protected array $list;
@@ -25,7 +27,7 @@ class InputParameter_List_PositiveInt
         $list = [];
         
         foreach ($items as $item) {
-            if ($item instanceof InputParameter) {
+            if ($item instanceof Type_InputParameter_PositiveInt) {
                 $list[] = $item;
                 continue;
             }
