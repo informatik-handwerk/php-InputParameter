@@ -5,13 +5,13 @@ declare(strict_types = 1);
 namespace ihde\php\InputParameter\Impl;
 
 use ihde\php\InputParameter\InputParameter;
-use ihde\php\InputParameter\InputParameter_List;
+use ihde\php\InputParameter\InputParameter_List_CommonNamed;
 use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
 use ihde\php\InputParameter\Lang\Type_InputParameter_Date;
 use ihde\php\InputParameter\StringParser;
 
 class InputParameter_List_Date
-    extends InputParameter_List
+    extends InputParameter_List_CommonNamed
     implements Type_InputParameter_Date {
     
     /** @var InputParameter_Range_Date[] $list */
