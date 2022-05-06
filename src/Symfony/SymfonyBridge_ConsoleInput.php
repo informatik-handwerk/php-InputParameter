@@ -5,13 +5,13 @@ declare(strict_types = 1);
 namespace ihde\php\InputParameter\Symfony;
 
 use ihde\php\InputParameter\InputParameter;
+use ihde\php\InputParameter\InputParameter_Collection;
 use Symfony\Component\Console\Input\InputInterface;
 
-class SymfonyCommandInput {
+class SymfonyBridge_ConsoleInput {
     /** @var string[]|InputParameter[] $map_optionName_transformerClass */
     protected array $map_optionName_transformerClass;
-    /** @var InputParameter[]|InputParameter[][] */
-    protected array $input;
+    protected InputParameter_Collection $inputParameterCollection;
     
     /**
      * @param InputInterface            $inputBag
@@ -20,7 +20,9 @@ class SymfonyCommandInput {
      */
     public function __construct(InputInterface $inputBag, array $map_optionName_transformerClass) {
         $this->map_optionName_transformerClass = $map_optionName_transformerClass;
-        $this->input = static::transform_manyOptions($inputBag, $map_optionName_transformerClass);
+        
+        $allInputParameters = static::transform_manyOptions($inputBag, $map_optionName_transformerClass);
+        $this->inputParameterCollection = InputParameter_Collection::instance_direct("", ...$allInputParameters);
     }
     
     /**
@@ -37,8 +39,14 @@ class SymfonyCommandInput {
         
         foreach ($map_optionName_transformerClass as $name => $transformerClass) {
             $inputSupplied = $inputBag->getOption($name);
+            
             $inputTransformed = static::transform_oneInput($name, $inputSupplied, $transformerClass);
-            $result[$name] = $inputTransformed;
+            
+            if (\is_array($inputTransformed)) {
+                \array_push($result, ...$inputTransformed);
+            } else {
+                $result[] = $inputTransformed;
+            }
         }
         
         return $result;
@@ -73,40 +81,44 @@ class SymfonyCommandInput {
     
     /**
      * @param string $name
-     * @return InputParameter|InputParameter[]
+     * @return InputParameter[]
      */
-    public function getOneInput(string $name) {
-        assert(\array_key_exists($name, $this->input));
-        return $this->input[$name];
+    public function getInputs_forName(string $name): array {
+        $result = $this->inputParameterCollection->getForName($name);
+        return $result;
     }
     
     /**
-     * @return InputParameter[]|InputParameter[][]
+     * @return InputParameter[][]
      */
-    public function getAllInputs(): array {
-        return $this->input;
+    public function getInputs_all(): array {
+        $result = $this->inputParameterCollection->getAllByName();
+        return $result;
+    }
+    
+    /**
+     * @param InputParameter_Collection $collection
+     * @return string
+     */
+    public static function collectionToString(InputParameter_Collection $collection): string {
+        $collector = [];
+        
+        $inputParameters = $collection->getAllFlatened();
+        foreach ($inputParameters as $inputParameter) {
+            $name = $inputParameter->getName();
+            $value = $inputParameter->__toString();
+            $collector[] = "--$name='$value'";
+        }
+        
+        $inputParametersByName = \implode(" ", $collector);
+        return $inputParametersByName;
     }
     
     /**
      * @return string
      */
     public function __toString(): string {
-        $collector = [];
-        
-        foreach ($this->input as $name => $input) {
-            if (!\is_array($input)) {
-                $input = [$input];
-            }
-            
-            foreach ($input as $inputParameter) {
-                assert($inputParameter instanceof InputParameter);
-                assert($inputParameter->getName() === $name);
-                
-                $collector = "--$name='" . $inputParameter->__toString() . "'";
-            }
-        }
-        
-        $result = \implode(" ", $collector);
+        $result = static::collectionToString($this->inputParameterCollection);
         return $result;
     }
     

@@ -6,10 +6,12 @@ namespace ihde\php\InputParameter\Impl;
 
 use ihde\php\InputParameter\InputParameter_Single;
 use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
+use ihde\php\InputParameter\Lang\Type_InputParameter_Date;
 use ihde\php\InputParameter\StringParser;
 
 class InputParameter_Single_Date
-    extends InputParameter_Single {
+    extends InputParameter_Single
+    implements Type_InputParameter_Date {
     
     protected \DateTimeImmutable $value;
     

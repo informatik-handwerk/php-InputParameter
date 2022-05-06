@@ -10,7 +10,19 @@ final class StringParser
     extends StaticAPI {
     
     public const SPLITTER_list = ",";
-    public const SPLITTER_range = ".."; //do not change without understanding/testing the code.
+    public const SPLITTER_range = ".."; //do not change without understanding the code.
+    
+    /**
+     * @param string $input
+     * @return void
+     */
+    protected static function assertUntrimmable(string $input): void  {
+        $trim = \trim($input);
+        
+        if ($trim !== $input)  {
+            throw new \InvalidArgumentException("Surrounded by not allowed characters.");
+        }
+    }
     
     /**
      * @param string $input
@@ -18,6 +30,8 @@ final class StringParser
      * @throws \InvalidArgumentException
      */
     public static function parse_positiveInt(string $input): int {
+        self::assertUntrimmable($input);
+    
         $asInt = \filter_var($input, \FILTER_VALIDATE_INT);
         
         if (!\is_int($asInt) || $asInt < 0) {
@@ -38,6 +52,8 @@ final class StringParser
      * @throws \InvalidArgumentException|\Exception
      */
     public static function parse_date(string $input): \DateTimeImmutable {
+        self::assertUntrimmable($input);
+    
         $asInt = \filter_var($input, \FILTER_VALIDATE_INT);
         
         if (\is_int($asInt)) {
@@ -128,7 +144,9 @@ final class StringParser
      * @return bool
      */
     public static function containsStandalone(string $input): bool {
-        if (self::containsList($input) || self::containsRange($input)) {
+        if (false
+            || self::containsList($input)
+            || self::containsRange($input)) {
             return false;
         }
         
@@ -141,8 +159,7 @@ final class StringParser
      */
     public static function splitList(string $input): array {
         $split = \explode(self::SPLITTER_list, $input);
-        $trimmed = \array_map("trim", $split);
-        $filtered = \array_filter($trimmed, static fn(string $s) => $s !== "");
+        $filtered = \array_filter($split, static fn(string $s) => $s !== "");
         
         return $filtered;
     }
@@ -156,8 +173,7 @@ final class StringParser
         
         $split = \explode(self::SPLITTER_range, $input);
         $split[1] = $split[1] ?? "";
-        $trimmed = \array_map("trim", $split);
-        $nulled = \array_map(static fn(string $s) => ($s === "") ? null : $s, $trimmed);
+        $nulled = \array_map(static fn(string $s) => ($s === "") ? null : $s, $split);
         
         return $nulled;
     }

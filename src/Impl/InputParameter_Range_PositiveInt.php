@@ -6,10 +6,12 @@ namespace ihde\php\InputParameter\Impl;
 
 use ihde\php\InputParameter\InputParameter_Range;
 use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
+use ihde\php\InputParameter\Lang\Type_InputParameter_PositiveInt;
 use ihde\php\InputParameter\StringParser;
 
 class InputParameter_Range_PositiveInt
-    extends InputParameter_Range {
+    extends InputParameter_Range
+    implements Type_InputParameter_PositiveInt {
     
     /**
      * @param string                                 $name

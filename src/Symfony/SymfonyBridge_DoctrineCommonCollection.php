@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\CompositeExpression;
 use Doctrine\Common\Collections\Expr\Expression;
 use ihde\php\InputParameter\InputParameter;
+use ihde\php\InputParameter\InputParameter_Collection;
 use ihde\php\InputParameter\InputParameter_List;
 use ihde\php\InputParameter\InputParameter_Range;
 use ihde\php\InputParameter\InputParameter_Single;
@@ -55,7 +56,7 @@ class SymfonyBridge_DoctrineCommonCollection {
 
         return $criteria;
     }
-
+    
     /**
      * @param InputParameter ...$params
      * @return Expression
@@ -63,24 +64,10 @@ class SymfonyBridge_DoctrineCommonCollection {
      * @throws \RuntimeException
      */
     public function parametersAsExpression(InputParameter ...$params): Expression {
-        $expressions = [];
-
-        foreach ($params as $param) {
-            $expressions[] = $this->oneAsExpression($param);
-        }
-
-        if (\count($expressions) === 1) {
-            return \reset($expressions);
-        }
-
-        $result = new CompositeExpression(
-            CompositeExpression::TYPE_AND,
-            $expressions
-        );
-
+        $result = $this->andManyToExpression($params);
         return $result;
     }
-
+    
     /**
      * @param InputParameter $param
      * @return Expression
@@ -100,6 +87,10 @@ class SymfonyBridge_DoctrineCommonCollection {
             return $this->oneAsExpression_List($param);
         }
 
+        if ($param instanceof InputParameter_Collection) {
+            return $this->oneAsExpression_Collection($param);
+        }
+
         throw new \LogicException("Switch fallthrough");
     }
 
@@ -107,9 +98,7 @@ class SymfonyBridge_DoctrineCommonCollection {
      * @param InputParameter_Single $param
      * @return Expression
      */
-    protected function oneAsExpression_Single(
-        InputParameter_Single $param
-    ): Expression {
+    protected function oneAsExpression_Single(InputParameter_Single $param): Expression {
         $columnName = $this->parameterToColumnName($param);
 
         $result = Criteria::expr()
@@ -123,9 +112,7 @@ class SymfonyBridge_DoctrineCommonCollection {
      * @return Expression
      * @throws \RuntimeException
      */
-    protected function oneAsExpression_Range(
-        InputParameter_Range $param
-    ): Expression {
+    protected function oneAsExpression_Range(InputParameter_Range $param): Expression {
         $columnName = $this->parameterToColumnName($param);
 
         $expressions = [];
@@ -156,9 +143,7 @@ class SymfonyBridge_DoctrineCommonCollection {
      * @throws \LogicException
      * @throws \RuntimeException
      */
-    protected function oneAsExpression_List(
-        InputParameter_List $param
-    ): Expression {
+    protected function oneAsExpression_List(InputParameter_List $param): Expression {
         $expressions = [];
 
         $subParams = $param->getList();
@@ -175,5 +160,39 @@ class SymfonyBridge_DoctrineCommonCollection {
             $expressions
         );
     }
+    
+    /**
+     * @param InputParameter_Collection $param
+     * @return Expression
+     */
+    public function oneAsExpression_Collection(InputParameter_Collection $param): Expression {
+        $items = $param->getAllFlatened();
+        $result = $this->andManyToExpression($items);
+        return $result;
+    }
+    
+    /**
+     * @param InputParameter[] $items
+     * @return Expression
+     */
+    public function andManyToExpression(array $items): Expression {
+        $expressions = [];
+        
+        foreach ($items as $item) {
+            $expressions[] = $this->oneAsExpression($item);
+        }
+        
+        if (\count($expressions) === 1) {
+            return \reset($expressions);
+        }
+        
+        $result = new CompositeExpression(
+            CompositeExpression::TYPE_AND,
+            $expressions
+        );
+        
+        return $result;
+    }
+    
 }
 

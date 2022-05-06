@@ -5,27 +5,29 @@ declare(strict_types = 1);
 namespace ihde\php\InputParameter\Impl;
 
 use ihde\php\InputParameter\InputParameter;
-use ihde\php\InputParameter\InputParameter_List;
+use ihde\php\InputParameter\InputParameter_List_CommonNamed;
 use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
+use ihde\php\InputParameter\Lang\Type_InputParameter_PositiveInt;
 use ihde\php\InputParameter\StringParser;
 
 class InputParameter_List_PositiveInt
-    extends InputParameter_List {
+    extends InputParameter_List_CommonNamed
+    implements Type_InputParameter_PositiveInt {
     
     /** @var InputParameter_Single_PositiveInt[]|InputParameter_Range_PositiveInt[] $list */
     protected array $list;
     
     /**
-     * @param $name
-     * @param ...$items
+     * @param string $name
+     * @param        ...$items
      * @return InputParameter_List_PositiveInt
      * @throws \InvalidArgumentException
      */
-    public static function instance_direct($name, ...$items): self {
+    public static function instance_direct(string $name, ...$items): self {
         $list = [];
         
         foreach ($items as $item) {
-            if ($item instanceof InputParameter) {
+            if ($item instanceof Type_InputParameter_PositiveInt) {
                 $list[] = $item;
                 continue;
             }
