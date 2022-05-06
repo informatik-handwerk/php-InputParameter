@@ -6,6 +6,7 @@ namespace ihde\php\InputParameter\Symfony;
 
 use Doctrine\ORM\Query\Expr;
 use ihde\php\InputParameter\InputParameter;
+use ihde\php\InputParameter\InputParameter_Collection;
 use ihde\php\InputParameter\InputParameter_List;
 use ihde\php\InputParameter\InputParameter_Range;
 use ihde\php\InputParameter\InputParameter_Single;
@@ -44,7 +45,7 @@ class SymfonyBridge_DoctrineOrmQueryExpr
         $nameColumn = $this->nameMap[$nameParam] ?? $nameParam;
         return $nameColumn;
     }
-
+    
     /**
      * @param InputParameter ...$params
      * @return Expr\Andx
@@ -52,23 +53,10 @@ class SymfonyBridge_DoctrineOrmQueryExpr
      */
     public function parametersAsExpression(InputParameter ...$params): Expr\Andx
     {
-        $expressions = [];
-
-        foreach ($params as $param) {
-            $expressions[] = $this->oneAsExpression($param);
-        }
-
-        if (\count($expressions) === 1) {
-            return \reset($expressions);
-        }
-
-        $result = $this->exprFactory->andX(
-            ...$expressions
-        );
-
+        $result = $this->andManyToExpression($params);
         return $result;
     }
-
+    
     /**
      * @param InputParameter $param
      * @return Expr\Andx|Expr\Comparison|Expr\Orx
@@ -88,6 +76,10 @@ class SymfonyBridge_DoctrineOrmQueryExpr
             return $this->oneAsExpression_List($param);
         }
 
+        if ($param instanceof InputParameter_Collection) {
+            return $this->oneAsExpression_Collection($param);
+        }
+
         throw new \LogicException("Switch fallthrough");
     }
 
@@ -95,9 +87,7 @@ class SymfonyBridge_DoctrineOrmQueryExpr
      * @param InputParameter_Single $param
      * @return Expr\Comparison
      */
-    protected function oneAsExpression_Single(
-        InputParameter_Single $param
-    ): Expr\Comparison {
+    protected function oneAsExpression_Single(InputParameter_Single $param): Expr\Comparison {
         $columnName = $this->parameterToColumnName($param);
 
         $result = $this->exprFactory->eq($columnName, $param->getValue());
@@ -109,9 +99,7 @@ class SymfonyBridge_DoctrineOrmQueryExpr
      * @param InputParameter_Range $param
      * @return Expr\Andx
      */
-    protected function oneAsExpression_Range(
-        InputParameter_Range $param
-    ): Expr\Andx {
+    protected function oneAsExpression_Range(InputParameter_Range $param): Expr\Andx {
         $columnName = $this->parameterToColumnName($param);
 
         $expressions = [];
@@ -137,9 +125,7 @@ class SymfonyBridge_DoctrineOrmQueryExpr
      * @param InputParameter_List $param
      * @return Expr\Orx
      */
-    protected function oneAsExpression_List(
-        InputParameter_List $param
-    ): Expr\Orx {
+    protected function oneAsExpression_List(InputParameter_List $param): Expr\Orx {
         $expressions = [];
 
         $subParams = $param->getList();
@@ -153,5 +139,41 @@ class SymfonyBridge_DoctrineOrmQueryExpr
 
         return $this->exprFactory->orX(...$expressions);
     }
+    
+    /**
+     * @param \ihde\php\InputParameter\InputParameter_Collection $param
+     * @return Expr\Andx
+     */
+    public function oneAsExpression_Collection(InputParameter_Collection $param): Expr\Andx
+    {
+        $items = $param->getAllFlatened();
+        $result = $this->andManyToExpression($items);
+        return $result;
+    }
+    
+    /**
+     * @param InputParameter[] $items
+     * @return Expr\Andx
+     */
+    public function andManyToExpression(array $items): Expr\Andx
+    {
+        $expressions = [];
+    
+        foreach ($items as $item) {
+            $expressions[] = $this->oneAsExpression($item);
+        }
+        
+        if (\count($expressions) === 1) {
+            return \reset($expressions);
+        }
+        
+        $result = $this->exprFactory->andX(
+            ...$expressions
+        );
+        
+        return $result;
+    }
+    
+    
 }
 

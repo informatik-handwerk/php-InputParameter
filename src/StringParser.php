@@ -9,7 +9,6 @@ use ihde\php\InputParameter\Lang\StaticAPI;
 final class StringParser
     extends StaticAPI {
     
-    public const SPLITTER_collection = " ";
     public const SPLITTER_list = ",";
     public const SPLITTER_range = ".."; //do not change without understanding the code.
     
@@ -18,8 +17,7 @@ final class StringParser
      * @return void
      */
     protected static function assertUntrimmable(string $input): void  {
-        $trimCharacters = self::SPLITTER_collection . self::SPLITTER_list;
-        $trim = \trim($input, $trimCharacters);
+        $trim = \trim($input);
         
         if ($trim !== $input)  {
             throw new \InvalidArgumentException("Surrounded by not allowed characters.");
@@ -97,20 +95,7 @@ final class StringParser
      * @param string $input
      * @return bool
      */
-    public static function containsCollection(string $input): bool {
-        $posSeparatorCollection = \mb_strpos($input, self::SPLITTER_collection);
-        return $posSeparatorCollection !== false;
-    }
-    
-    /**
-     * @param string $input
-     * @return bool
-     */
     public static function containsList(string $input): bool {
-        if (self::containsCollection($input)) {
-            return false;
-        }
-    
         $posSeparatorList = \mb_strpos($input, self::SPLITTER_list);
         return $posSeparatorList !== false;
     }
@@ -160,24 +145,12 @@ final class StringParser
      */
     public static function containsStandalone(string $input): bool {
         if (false
-            || self::containsCollection($input)
             || self::containsList($input)
             || self::containsRange($input)) {
             return false;
         }
         
         return true;
-    }
-    
-    /**
-     * @param string $input
-     * @return string[]
-     */
-    public static function splitCollection(string $input): array {
-        $split = \explode(self::SPLITTER_collection, $input);
-        $filtered = \array_filter($split, static fn(string $s) => $s !== "");
-        
-        return $filtered;
     }
     
     /**
