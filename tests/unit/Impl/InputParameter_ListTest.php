@@ -3,12 +3,37 @@
 namespace ihde\php\InputParameter\codeception\Impl;
 
 use ihde\php\InputParameter\InputParameter_List;
+use ihde\php\InputParameter\StringParser;
 
 require_once("InputParameter_Test.php");
 
 abstract class InputParameter_ListTest
     extends InputParameter_Test {
     
+    /**
+     * @param array $items
+     * @param bool  $addRandomTrim
+     * @return string
+     * @throws \Exception
+     */
+    protected static function buildList(array $items, bool $addRandomTrim = false) {
+        if ($addRandomTrim) {
+            $items = \array_map(
+                static function ($s): string {
+                    $s = (string)$s;
+                    if ($s !== "") {
+                        $s = \str_pad($s, \mb_strlen($s) + \random_int(1, 3), " ", \STR_PAD_RIGHT);
+                        $s = \str_pad($s, \mb_strlen($s) + \random_int(1, 3), " ", \STR_PAD_LEFT);
+                    }
+                    return $s;
+                },
+                $items
+            );
+        }
+        
+        return \implode(StringParser::SPLITTER_list, $items);
+    }
+
     /**
      * @dataProvider provideInstantiationStrings
      * @param string $value
@@ -32,6 +57,20 @@ abstract class InputParameter_ListTest
         self::assertSame($list, $list2);
         
         return $instance;
+    }
+    
+    /**
+     * @dataProvider provideInvalidStrings
+     * @param string $value
+     * @return void
+     */
+    public function testInvalidInstantiateString(string $value): void {
+        try {
+            parent::testInstantiate($value);
+        self::fail();
+        } catch (\Throwable $t)  {
+            //ok
+        }
     }
     
     /**

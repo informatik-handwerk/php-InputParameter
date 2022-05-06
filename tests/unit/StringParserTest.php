@@ -27,8 +27,8 @@ class StringParserTest
             "list, deformed start" => [StringParser::SPLITTER_list . "b", 1],
             "list, deformed succession" => ["a" . StringParser::SPLITTER_list . StringParser::SPLITTER_list . "c", 2],
             "list, classical" => ["a" . StringParser::SPLITTER_list . "b", 2],
-            "list, with range" => ["a..A" . StringParser::SPLITTER_list . " b", 2],
-            "list, normal long" => ["a" . StringParser::SPLITTER_list . " b" . StringParser::SPLITTER_list . " c", 3],
+            "list, with range" => ["a..A" . StringParser::SPLITTER_list . "b", 2],
+            "list, normal long" => ["a" . StringParser::SPLITTER_list . "b" . StringParser::SPLITTER_list . "c", 3],
         ];
     }
     
