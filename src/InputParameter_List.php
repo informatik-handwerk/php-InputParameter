@@ -5,8 +5,7 @@ declare(strict_types = 1);
 namespace ihde\php\InputParameter;
 
 abstract class InputParameter_List
-    extends InputParameter
-    implements \Countable {
+    extends InputParameter {
     
     /** @var InputParameter[] $list */
     protected array $list;
@@ -32,14 +31,7 @@ abstract class InputParameter_List
      * @return bool
      */
     public function hasItems(): bool {
-        return \count($this) > 0;
-    }
-    
-    /**
-     * @return int
-     */
-    public function count(): int {
-        return \count($this->list);
+        return \count($this->list) > 0;
     }
     
     /**

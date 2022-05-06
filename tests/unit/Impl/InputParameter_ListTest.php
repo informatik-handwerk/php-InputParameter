@@ -44,7 +44,7 @@ abstract class InputParameter_ListTest
     public function testSize(string $value, int $size): void {
         $instance = (static::INPUT_PARAMETER_CLASS)::instance_keyValue(self::KEY, $value);
         self::assertSame($size !== 0, $instance->hasItems());
-        self::assertCount($size, $instance);
+        //self::assertCount($size, $instance);
         self::assertCount($size, $instance->getList());
     }
     
