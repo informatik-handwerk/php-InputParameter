@@ -22,11 +22,11 @@ abstract class InputParameter_List
     }
     
     /**
-     * @param $name
-     * @param ...$items
+     * @param string $name
+     * @param        ...$items
      * @return InputParameter_List
      */
-    abstract public static function instance_direct($name, ...$items): self;
+    abstract public static function instance_direct(string $name, ...$items): self;
     
     /**
      * @return bool
