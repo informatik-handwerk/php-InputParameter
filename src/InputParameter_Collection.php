@@ -4,10 +4,13 @@ declare(strict_types = 1);
 
 namespace ihde\php\InputParameter;
 
-use ihde\php\InputParameter\Lang\Type_InputParameter_mixed;
+use ihde\php\InputParameter\Lang\Form_composite;
+use ihde\php\InputParameter\Lang\Type_mixed;
 
 class InputParameter_Collection
-    implements Input, Type_InputParameter_mixed {
+    implements Input,
+               Form_composite,
+               Type_mixed {
     
     /** @var InputParameter[][] $itemsByName */
     protected array $itemsByName;

@@ -6,12 +6,12 @@ namespace ihde\php\InputParameter\Impl;
 
 use ihde\php\InputParameter\InputParameter_Single;
 use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
-use ihde\php\InputParameter\Lang\Type_InputParameter_PositiveInt;
+use ihde\php\InputParameter\Lang\Type_PositiveInt;
 use ihde\php\InputParameter\StringParser;
 
 class InputParameter_Single_PositiveInt
     extends InputParameter_Single
-    implements Type_InputParameter_PositiveInt {
+    implements Type_PositiveInt {
     
     protected int $value;
     

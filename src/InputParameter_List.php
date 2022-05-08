@@ -4,8 +4,11 @@ declare(strict_types = 1);
 
 namespace ihde\php\InputParameter;
 
+use ihde\php\InputParameter\Lang\Form_composite;
+
 abstract class InputParameter_List
-    extends InputParameter {
+    extends InputParameter
+    implements Form_composite {
     
     /** @var InputParameter[] $list */
     protected array $list;

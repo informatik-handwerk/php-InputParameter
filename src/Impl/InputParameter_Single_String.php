@@ -6,11 +6,11 @@ namespace ihde\php\InputParameter\Impl;
 
 use ihde\php\InputParameter\InputParameter_Single;
 use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
-use ihde\php\InputParameter\Lang\Type_InputParameter_String;
+use ihde\php\InputParameter\Lang\Type_String;
 
 class InputParameter_Single_String
     extends InputParameter_Single
-    implements Type_InputParameter_String {
+    implements Type_String {
     
     protected string $value;
     
