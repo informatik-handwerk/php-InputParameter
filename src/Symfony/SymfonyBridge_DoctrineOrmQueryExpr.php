@@ -139,7 +139,7 @@ class SymfonyBridge_DoctrineOrmQueryExpr {
      * @param \ihde\php\InputParameter\InputCollection $param
      * @return Expr\Andx
      */
-    public function oneAsExpression_Collection(InputCollection $param): Expr\Andx {
+    protected function oneAsExpression_Collection(InputCollection $param): Expr\Andx {
         $items = $param->getAll();
         $result = $this->andManyToExpression($items);
         return $result;
@@ -149,7 +149,7 @@ class SymfonyBridge_DoctrineOrmQueryExpr {
      * @param Input[] $items
      * @return Expr\Andx
      */
-    public function andManyToExpression(array $items): Expr\Andx {
+    protected function andManyToExpression(array $items): Expr\Andx {
         $expressions = [];
         
         foreach ($items as $item) {

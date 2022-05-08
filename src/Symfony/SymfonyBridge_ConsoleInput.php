@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace ihde\php\InputParameter\Symfony;
 
+use ihde\php\InputParameter\Input;
 use ihde\php\InputParameter\InputParameter;
 use ihde\php\InputParameter\InputCollection;
 use ihde\php\InputParameter\Lang\Instantiable_fromStrings;
@@ -79,11 +80,27 @@ class SymfonyBridge_ConsoleInput {
     }
 
     /**
-     * @return InputParameter[][]
+     * @return InputParameter[]
      */
     public function getInputs_all(): array {
         $result = $this->inputParameterCollection->getAllParameters();
         return $result;
+    }
+    
+    /**
+     * @param Input $input
+     * @return string
+     */
+    public static function inputToString(Input $input): string {
+        if ($input instanceof InputCollection) {
+            return static::inputCollectionToString($input);
+        }
+        
+        if ($input instanceof InputParameter) {
+            return static::inputParameterToString($input);
+        }
+        
+        throw new \TypeError(\get_class($input));
     }
 
     /**

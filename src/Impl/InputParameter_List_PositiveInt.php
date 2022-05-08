@@ -8,7 +8,6 @@ use ihde\php\InputParameter\InputParameter;
 use ihde\php\InputParameter\InputParameter_List;
 use ihde\php\InputParameter\Lang\Form_simple;
 use ihde\php\InputParameter\Lang\Instantiable_fromStrings;
-use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
 use ihde\php\InputParameter\Lang\Type_PositiveInt;
 use ihde\php\InputParameter\StringParser;
 

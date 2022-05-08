@@ -166,7 +166,7 @@ class SymfonyBridge_DoctrineCommonCollection {
      * @param InputCollection $param
      * @return Expression
      */
-    public function oneAsExpression_Collection(InputCollection $param): Expression {
+    protected function oneAsExpression_Collection(InputCollection $param): Expression {
         $items = $param->getAll();
         $result = $this->andManyToExpression($items);
         return $result;
@@ -176,7 +176,7 @@ class SymfonyBridge_DoctrineCommonCollection {
      * @param Input[] $items
      * @return Expression
      */
-    public function andManyToExpression(array $items): Expression {
+    protected function andManyToExpression(array $items): Expression {
         $expressions = [];
         
         foreach ($items as $item) {
