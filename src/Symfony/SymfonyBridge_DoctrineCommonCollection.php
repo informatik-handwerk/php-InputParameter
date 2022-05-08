@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Expr\CompositeExpression;
 use Doctrine\Common\Collections\Expr\Expression;
 use ihde\php\InputParameter\Input;
 use ihde\php\InputParameter\InputParameter;
-use ihde\php\InputParameter\InputParameter_Collection;
+use ihde\php\InputParameter\InputCollection;
 use ihde\php\InputParameter\InputParameter_List;
 use ihde\php\InputParameter\InputParameter_Range;
 use ihde\php\InputParameter\InputParameter_Single;
@@ -88,7 +88,7 @@ class SymfonyBridge_DoctrineCommonCollection {
             return $this->oneAsExpression_List($input);
         }
         
-        if ($input instanceof InputParameter_Collection) {
+        if ($input instanceof InputCollection) {
             return $this->oneAsExpression_Collection($input);
         }
         
@@ -163,10 +163,10 @@ class SymfonyBridge_DoctrineCommonCollection {
     }
     
     /**
-     * @param InputParameter_Collection $param
+     * @param InputCollection $param
      * @return Expression
      */
-    public function oneAsExpression_Collection(InputParameter_Collection $param): Expression {
+    public function oneAsExpression_Collection(InputCollection $param): Expression {
         $items = $param->getAll();
         $result = $this->andManyToExpression($items);
         return $result;

@@ -7,7 +7,7 @@ namespace ihde\php\InputParameter;
 use ihde\php\InputParameter\Lang\Form_composite;
 use ihde\php\InputParameter\Lang\Type_mixed;
 
-class InputParameter_Collection
+class InputCollection
     implements Input,
                Form_composite,
                Type_mixed {

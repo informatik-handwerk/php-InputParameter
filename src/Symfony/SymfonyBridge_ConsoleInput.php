@@ -5,14 +5,14 @@ declare(strict_types = 1);
 namespace ihde\php\InputParameter\Symfony;
 
 use ihde\php\InputParameter\InputParameter;
-use ihde\php\InputParameter\InputParameter_Collection;
+use ihde\php\InputParameter\InputCollection;
 use ihde\php\InputParameter\Lang\Instantiable_fromStrings;
 use Symfony\Component\Console\Input\InputInterface;
 
 class SymfonyBridge_ConsoleInput {
     /** @var string[]|Instantiable_fromStrings[] $map_optionName_transformerClass */
     protected array $map_optionName_transformerClass;
-    protected InputParameter_Collection $inputParameterCollection;
+    protected InputCollection $inputParameterCollection;
 
     /**
      * @param InputInterface            $inputBag
@@ -22,7 +22,7 @@ class SymfonyBridge_ConsoleInput {
     public function __construct(InputInterface $inputBag, array $map_optionName_transformerClass) {
         $this->map_optionName_transformerClass = $map_optionName_transformerClass;
 
-        $this->inputParameterCollection = InputParameter_Collection::instance();
+        $this->inputParameterCollection = InputCollection::instance();
         $allInputParameters = static::transform_manyOptions($inputBag, $map_optionName_transformerClass);
 
         foreach ($allInputParameters as $name => $eachInputParameters) {
@@ -98,10 +98,10 @@ class SymfonyBridge_ConsoleInput {
     }
 
     /**
-     * @param InputParameter_Collection $collection
+     * @param InputCollection $collection
      * @return string
      */
-    public static function inputCollectionToString(InputParameter_Collection $collection): string {
+    public static function inputCollectionToString(InputCollection $collection): string {
         $collector = [];
 
         $inputs = $collection->getAllParameters();
