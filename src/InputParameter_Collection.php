@@ -12,43 +12,61 @@ class InputParameter_Collection
                Form_composite,
                Type_mixed {
     
-    /** @var InputParameter[][] $itemsByName */
-    protected array $itemsByName;
+    /** @var Input[] $items */
+    protected array $items = [];
     
     /**
-     * @param InputParameter ...$items
+     *
      */
-    public function __construct(InputParameter ...$items) {
-        foreach ($items as $eachItem) {
-            $eachName = $eachItem->getName();
-            $this->itemsByName[$eachName][] = $eachName;
-        }
+    protected function __construct() {
     }
     
     /**
-     * @return InputParameter[][]
+     * @return static
      */
-    public function getAllByName(): array {
-        return $this->itemsByName;
+    public static function instance(): self {
+        return new static();
+    }
+    
+    /**
+     * @return static
+     */
+    public function cloneInstance(): self {
+        $instance = new static();
+        $instance->add(...$this->items);
+        return $instance;
+    }
+    
+    /**
+     * @param Input ...$input
+     * @return $this
+     */
+    public function add(Input ...$input): self {
+        \array_push($this->items, ...$input);
+        return $this;
+    }
+    
+    /**
+     * @return Input[]
+     */
+    public function getAllInputs(): array {
+        $result = $this->items;
+        return $result;
     }
     
     /**
      * @return InputParameter[]
      */
-    public function getAllFlatened(): array {
+    public function getAllParameters(): array {
         $result = [];
-        foreach ($this->itemsByName as $items) {
-            \array_push($result, ...$items);
+        foreach ($this->items as $item) {
+            if ($item instanceof self) {
+                \array_push($result, ...$item->getAllParameters());
+            } else {
+                $result[] = $item;
+            }
         }
         
-        return $result;
-    }
-    
-    /**
-     * @return InputParameter[][]
-     */
-    public function getForName(string $name): array {
-        $result = $this->itemsByName[$name] ?? [];
         return $result;
     }
     

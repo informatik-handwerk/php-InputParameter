@@ -13,7 +13,7 @@ class SymfonyBridge_ConsoleInput {
     /** @var string[]|Instantiable_fromStrings[] $map_optionName_transformerClass */
     protected array $map_optionName_transformerClass;
     protected InputParameter_Collection $inputParameterCollection;
-    
+
     /**
      * @param InputInterface            $inputBag
      * @param string[]|InputParameter[] $map_optionName_transformerClass
@@ -21,11 +21,15 @@ class SymfonyBridge_ConsoleInput {
      */
     public function __construct(InputInterface $inputBag, array $map_optionName_transformerClass) {
         $this->map_optionName_transformerClass = $map_optionName_transformerClass;
-        
+
+        $this->inputParameterCollection = InputParameter_Collection::instance();
         $allInputParameters = static::transform_manyOptions($inputBag, $map_optionName_transformerClass);
-        $this->inputParameterCollection = InputParameter_Collection::instance_direct("", ...$allInputParameters);
+
+        foreach ($allInputParameters as $name => $eachInputParameters) {
+            $this->inputParameterCollection->add(...$eachInputParameters);
+        }
     }
-    
+
     /**
      * @param InputInterface            $inputBag
      * @param string[]|InputParameter[] $map_optionName_transformerClass InputTransformer::class
@@ -37,32 +41,26 @@ class SymfonyBridge_ConsoleInput {
         array $map_optionName_transformerClass
     ): array {
         $result = [];
-        
+
         foreach ($map_optionName_transformerClass as $name => $transformerClass) {
             $inputSupplied = $inputBag->getOption($name);
-            
             $inputTransformed = static::transform_oneInput($name, $inputSupplied, $transformerClass);
-            
-            if (\is_array($inputTransformed)) {
-                \array_push($result, ...$inputTransformed);
-            } else {
-                $result[] = $inputTransformed;
-            }
+            $result[$name] = $inputTransformed;
         }
-        
+
         return $result;
     }
-    
+
     /**
      * Caller is responsible for fetching input and persisting transformed result.
      *
-     * @param string                $name
-     * @param string|array          $inputSupplied
-     * @return InputParameter|InputParameter[]
+     * @param string                          $name
+     * @param string|array                    $inputSupplied
      * @param string|Instantiable_fromStrings $transformerClass
+     * @return InputParameter[]
      * @throws \Exception
      */
-    protected static function transform_oneInput(string $name, $inputSupplied, string $transformerClass) {
+    protected static function transform_oneInput(string $name, $inputSupplied, string $transformerClass): array {
         assert(\is_a($transformerClass, Instantiable_fromStrings::class, true));
 
         if (\is_array($inputSupplied)) {
@@ -76,53 +74,53 @@ class SymfonyBridge_ConsoleInput {
         } else {
             $inputTransformed = [$transformerClass::instance_fromStrings($name, $inputSupplied)];
         }
-        
+
         return $inputTransformed;
     }
-    
-    /**
-     * @param string $name
-     * @return InputParameter[]
-     */
-    public function getInputs_forName(string $name): array {
-        $result = $this->inputParameterCollection->getForName($name);
-        return $result;
-    }
-    
+
     /**
      * @return InputParameter[][]
      */
     public function getInputs_all(): array {
-        $result = $this->inputParameterCollection->getAllByName();
+        $result = $this->inputParameterCollection->getAllParameters();
         return $result;
     }
-    
+
+    /**
+     * @param InputParameter $inputParameter
+     * @return string
+     */
+    public static function inputParameterToString(InputParameter $inputParameter): string {
+        $name = $inputParameter->getName();
+        $value = $inputParameter->__toString();
+        $result = "--$name='$value'";
+        return $result;
+    }
+
     /**
      * @param InputParameter_Collection $collection
      * @return string
      */
-    public static function collectionToString(InputParameter_Collection $collection): string {
+    public static function inputCollectionToString(InputParameter_Collection $collection): string {
         $collector = [];
-        
-        $inputParameters = $collection->getAllFlatened();
-        foreach ($inputParameters as $inputParameter) {
-            $name = $inputParameter->getName();
-            $value = $inputParameter->__toString();
-            $collector[] = "--$name='$value'";
+
+        $inputs = $collection->getAllParameters();
+        foreach ($inputs as $input) {
+            $collector = static::inputParameterToString($input);
         }
-        
+
         $inputParametersByName = \implode(" ", $collector);
         return $inputParametersByName;
     }
-    
+
     /**
      * @return string
      */
     public function __toString(): string {
-        $result = static::collectionToString($this->inputParameterCollection);
+        $result = static::inputCollectionToString($this->inputParameterCollection);
         return $result;
     }
-    
-    
+
+
 }
 

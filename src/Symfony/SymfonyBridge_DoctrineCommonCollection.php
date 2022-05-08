@@ -167,7 +167,7 @@ class SymfonyBridge_DoctrineCommonCollection {
      * @return Expression
      */
     public function oneAsExpression_Collection(InputParameter_Collection $param): Expression {
-        $items = $param->getAllFlatened();
+        $items = $param->getAll();
         $result = $this->andManyToExpression($items);
         return $result;
     }

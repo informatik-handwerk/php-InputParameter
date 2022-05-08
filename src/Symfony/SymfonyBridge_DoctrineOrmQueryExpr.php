@@ -140,7 +140,7 @@ class SymfonyBridge_DoctrineOrmQueryExpr {
      * @return Expr\Andx
      */
     public function oneAsExpression_Collection(InputParameter_Collection $param): Expr\Andx {
-        $items = $param->getAllFlatened();
+        $items = $param->getAll();
         $result = $this->andManyToExpression($items);
         return $result;
     }
