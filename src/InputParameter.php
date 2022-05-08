@@ -7,7 +7,8 @@ namespace ihde\php\InputParameter;
 use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
 
 abstract class InputParameter
-    implements Instantiable_KeyValue {
+    implements Input,
+               Instantiable_KeyValue {
     
     protected string $name;
     /** @var ?string|mixed $seed */
