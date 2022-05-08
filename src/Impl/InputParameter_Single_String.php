@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace ihde\php\InputParameter\Impl;
 
+use ihde\php\InputParameter\InputParameter;
 use ihde\php\InputParameter\InputParameter_Single;
 use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
 use ihde\php\InputParameter\Lang\Type_String;
@@ -37,7 +38,7 @@ class InputParameter_Single_String
      * @implements Instantiable_KeyValue
      * @inheritDoc
      */
-    public static function instance_keyValue($key, $value): self {
+    public static function instance_fromStrings(string $key, string $value): InputParameter {
         $instance = new static($key, $value);
         return $instance;
     }

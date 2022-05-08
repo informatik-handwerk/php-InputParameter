@@ -6,10 +6,11 @@ namespace ihde\php\InputParameter\Symfony;
 
 use ihde\php\InputParameter\InputParameter;
 use ihde\php\InputParameter\InputParameter_Collection;
+use ihde\php\InputParameter\Lang\Instantiable_fromStrings;
 use Symfony\Component\Console\Input\InputInterface;
 
 class SymfonyBridge_ConsoleInput {
-    /** @var string[]|InputParameter[] $map_optionName_transformerClass */
+    /** @var string[]|Instantiable_fromStrings[] $map_optionName_transformerClass */
     protected array $map_optionName_transformerClass;
     protected InputParameter_Collection $inputParameterCollection;
     
@@ -57,23 +58,23 @@ class SymfonyBridge_ConsoleInput {
      *
      * @param string                $name
      * @param string|array          $inputSupplied
-     * @param string|InputParameter $transformerClass
      * @return InputParameter|InputParameter[]
+     * @param string|Instantiable_fromStrings $transformerClass
      * @throws \Exception
      */
     protected static function transform_oneInput(string $name, $inputSupplied, string $transformerClass) {
-        assert(\is_a($transformerClass, InputParameter::class, true));
-        
+        assert(\is_a($transformerClass, Instantiable_fromStrings::class, true));
+
         if (\is_array($inputSupplied)) {
             $inputTransformed = \array_map(
-                static fn(string $eachInputSupplied) => $transformerClass::instance_keyValue(
+                static fn(string $eachInputSupplied) => $transformerClass::instance_fromStrings(
                     $name,
                     $eachInputSupplied
                 ),
                 $inputSupplied
             );
         } else {
-            $inputTransformed = $transformerClass::instance_keyValue($name, $inputSupplied);
+            $inputTransformed = [$transformerClass::instance_fromStrings($name, $inputSupplied)];
         }
         
         return $inputTransformed;

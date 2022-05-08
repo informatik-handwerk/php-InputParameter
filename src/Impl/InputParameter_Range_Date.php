@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace ihde\php\InputParameter\Impl;
 
 use ihde\php\InputParameter\InputParameter_Range;
+use ihde\php\InputParameter\Lang\Instantiable_fromStrings;
 use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
 use ihde\php\InputParameter\Lang\Type_Date;
 use ihde\php\InputParameter\StringParser;
@@ -111,11 +112,11 @@ class InputParameter_Range_Date
     }
     
     /**
-     * @implements Instantiable_KeyValue
+     * @implements Instantiable_fromStrings
      * @inheritDoc
      * @throws \InvalidArgumentException|\Exception
      */
-    public static function instance_keyValue($key, $value): self {
+    public static function instance_fromStrings(string $key, string $value): self {
         if (StringParser::containsStandalone($value)) {
             $date = StringParser::parse_date($value);
             $range = self::toRange($date);
@@ -133,10 +134,10 @@ class InputParameter_Range_Date
         
         $lowerBound = ($rawLowerBound === null)
             ? null
-            : InputParameter_Single_Date::instance_keyValue($key, $rawLowerBound);
+            : InputParameter_Single_Date::instance_fromStrings($key, $rawLowerBound);
         $upperBound = ($rawUpperBound === null)
             ? null
-            : InputParameter_Single_Date::instance_keyValue($key, $rawUpperBound);
+            : InputParameter_Single_Date::instance_fromStrings($key, $rawUpperBound);
         
         $instance = new static($key, $value, $lowerBound, $upperBound);
         return $instance;

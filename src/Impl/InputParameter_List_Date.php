@@ -6,6 +6,7 @@ namespace ihde\php\InputParameter\Impl;
 
 use ihde\php\InputParameter\InputParameter;
 use ihde\php\InputParameter\InputParameter_List;
+use ihde\php\InputParameter\Lang\Instantiable_fromStrings;
 use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
 use ihde\php\InputParameter\Lang\Type_Date;
 use ihde\php\InputParameter\StringParser;
@@ -38,7 +39,7 @@ class InputParameter_List_Date
             }
             
             if (\is_string($item) || \is_int($item)) {
-                $list[] = InputParameter_Range_Date::instance_keyValue($name, (string)$item);
+                $list[] = InputParameter_Range_Date::instance_fromStrings($name, (string)$item);
                 continue;
             }
             
@@ -49,7 +50,7 @@ class InputParameter_List_Date
                     }
                     
                     if (\is_string($input) || \is_int($input)) {
-                        return InputParameter_Single_Date::instance_keyValue($name, (string)$input);
+                        return InputParameter_Single_Date::instance_fromStrings($name, (string)$input);
                     } else {
                         return InputParameter_Single_Date::instance_direct($name, $input);
                     }
@@ -69,15 +70,15 @@ class InputParameter_List_Date
     }
     
     /**
-     * @implements Instantiable_KeyValue
+     * @implements Instantiable_fromStrings
      * @inheritDoc
      * @throws \InvalidArgumentException|\Exception
      */
-    public static function instance_keyValue($key, $value): self {
+    public static function instance_fromStrings(string $key, string $value): self {
         $items = StringParser::splitList($value);
         
         $list = \array_map(static function (string $listItem) use ($key): InputParameter {
-            return InputParameter_Range_Date::instance_keyValue($key, $listItem);
+            return InputParameter_Range_Date::instance_fromStrings($key, $listItem);
         }, $items);
         
         $instance = new static($key, $value, ...$list);
