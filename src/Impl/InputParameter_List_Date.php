@@ -7,7 +7,6 @@ namespace ihde\php\InputParameter\Impl;
 use ihde\php\InputParameter\InputParameter;
 use ihde\php\InputParameter\InputParameter_List;
 use ihde\php\InputParameter\Lang\Instantiable_fromStrings;
-use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
 use ihde\php\InputParameter\Lang\Type_Date;
 use ihde\php\InputParameter\StringParser;
 

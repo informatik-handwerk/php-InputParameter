@@ -6,8 +6,8 @@ namespace ihde\php\InputParameter\Symfony;
 
 use Doctrine\ORM\Query\Expr;
 use ihde\php\InputParameter\Input;
-use ihde\php\InputParameter\InputParameter;
 use ihde\php\InputParameter\InputCollection;
+use ihde\php\InputParameter\InputParameter;
 use ihde\php\InputParameter\InputParameter_List;
 use ihde\php\InputParameter\InputParameter_Range;
 use ihde\php\InputParameter\InputParameter_Single;

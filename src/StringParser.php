@@ -16,10 +16,10 @@ final class StringParser
      * @param string $input
      * @return void
      */
-    protected static function assertUntrimmable(string $input): void  {
+    protected static function assertUntrimmable(string $input): void {
         $trim = \trim($input);
         
-        if ($trim !== $input)  {
+        if ($trim !== $input) {
             throw new \InvalidArgumentException("Surrounded by not allowed characters.");
         }
     }
@@ -31,7 +31,7 @@ final class StringParser
      */
     public static function parse_positiveInt(string $input): int {
         self::assertUntrimmable($input);
-    
+        
         $asInt = \filter_var($input, \FILTER_VALIDATE_INT);
         
         if (!\is_int($asInt) || $asInt < 0) {
@@ -53,7 +53,7 @@ final class StringParser
      */
     public static function parse_date(string $input): \DateTimeImmutable {
         self::assertUntrimmable($input);
-    
+        
         $asInt = \filter_var($input, \FILTER_VALIDATE_INT);
         
         if (\is_int($asInt)) {

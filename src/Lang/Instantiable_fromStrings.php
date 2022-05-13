@@ -15,7 +15,7 @@ interface Instantiable_fromStrings
      * @return InputParameter
      */
     public static function instance_fromStrings(string $key, string $value): InputParameter;
-
-
+    
+    
 }
 

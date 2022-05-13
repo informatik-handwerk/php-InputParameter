@@ -9,12 +9,12 @@ use ihde\php\InputParameter\Lang\Form_simple;
 abstract class InputParameter_Single
     extends InputParameter
     implements Form_simple {
-
+    
     /**
      * @return mixed
      */
     abstract public function getValue();
-
-
+    
+    
 }
 
