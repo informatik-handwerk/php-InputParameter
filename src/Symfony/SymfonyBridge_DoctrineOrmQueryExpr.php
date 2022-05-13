@@ -48,7 +48,7 @@ class SymfonyBridge_DoctrineOrmQueryExpr {
      * @return Expr\Andx
      * @throws \LogicException
      */
-    public function parametersAsExpression(Input ...$inputs): Expr\Andx {
+    public function inputsAsExpression(Input ...$inputs): Expr\Andx {
         $result = $this->andManyToExpression($inputs);
         return $result;
     }
@@ -136,11 +136,11 @@ class SymfonyBridge_DoctrineOrmQueryExpr {
     }
     
     /**
-     * @param \ihde\php\InputParameter\InputCollection $param
+     * @param \ihde\php\InputParameter\InputCollection $collection
      * @return Expr\Andx
      */
-    protected function oneAsExpression_Collection(InputCollection $param): Expr\Andx {
-        $items = $param->getAll();
+    protected function oneAsExpression_Collection(InputCollection $collection): Expr\Andx {
+        $items = $collection->getAllInputs();
         $result = $this->andManyToExpression($items);
         return $result;
     }
