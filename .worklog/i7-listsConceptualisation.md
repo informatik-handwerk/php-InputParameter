@@ -15,3 +15,8 @@ Parsing and __toString() of InputParameter_Collection is a problematic theme, si
 
 #### 2022-May-07 00:25:16 : feedback into `dev`
 
+
+
+#### 2022-May-13 19:28:45 : feedback into `dev`
+
+Another round was necessary, real-world usage showed usufficiencies in API
