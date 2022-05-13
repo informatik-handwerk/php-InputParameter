@@ -4,8 +4,11 @@ declare(strict_types = 1);
 
 namespace ihde\php\InputParameter;
 
+use ihde\php\InputParameter\Lang\Form_composite;
+
 abstract class InputParameter_List
-    extends InputParameter {
+    extends InputParameter
+    implements Form_composite {
     
     /** @var InputParameter[] $list */
     protected array $list;
@@ -15,7 +18,14 @@ abstract class InputParameter_List
      * @param                $seed
      * @param InputParameter ...$items
      */
-    protected function __construct(string $name, $seed, InputParameter ...$items) {
+    public function __construct(string $name, $seed, InputParameter ...$items) {
+        $names = \array_map(static fn(InputParameter $ip): string => $ip->getName(), $items);
+        $names[] = $name;
+        $names = \array_unique($names);
+        if (\count($names) !== 1) {
+            throw new \DomainException("Expecting common name, received: ", \implode(", ", $names));
+        }
+        
         parent::__construct($name, $seed);
         $this->list = $items;
     }

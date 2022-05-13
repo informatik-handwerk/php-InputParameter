@@ -5,13 +5,14 @@ declare(strict_types = 1);
 namespace ihde\php\InputParameter\Impl;
 
 use ihde\php\InputParameter\InputParameter_Range;
+use ihde\php\InputParameter\Lang\Instantiable_fromStrings;
 use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
-use ihde\php\InputParameter\Lang\Type_InputParameter_PositiveInt;
+use ihde\php\InputParameter\Lang\Type_PositiveInt;
 use ihde\php\InputParameter\StringParser;
 
 class InputParameter_Range_PositiveInt
     extends InputParameter_Range
-    implements Type_InputParameter_PositiveInt {
+    implements Type_PositiveInt {
     
     /**
      * @param string                                 $name
@@ -55,20 +56,20 @@ class InputParameter_Range_PositiveInt
     }
     
     /**
-     * @implements Instantiable_KeyValue
+     * @implements Instantiable_fromStrings
      * @inheritDoc
      * @throws \InvalidArgumentException
      */
-    public static function instance_keyValue($key, $value): self {
+    public static function instance_fromStrings(string $key, string $value): self {
         $range = StringParser::splitRange($value);
         [$rawLowerBound, $rawUpperBound] = $range;
         
         $lowerBound = ($rawLowerBound === null)
             ? null
-            : InputParameter_Single_PositiveInt::instance_keyValue($key, $rawLowerBound);
+            : InputParameter_Single_PositiveInt::instance_fromStrings($key, $rawLowerBound);
         $upperBound = ($rawUpperBound === null)
             ? null
-            : InputParameter_Single_PositiveInt::instance_keyValue($key, $rawUpperBound);
+            : InputParameter_Single_PositiveInt::instance_fromStrings($key, $rawUpperBound);
         
         $instance = new static($key, $value, $lowerBound, $upperBound);
         return $instance;

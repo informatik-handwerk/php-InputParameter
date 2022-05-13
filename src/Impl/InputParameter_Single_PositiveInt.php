@@ -5,13 +5,14 @@ declare(strict_types = 1);
 namespace ihde\php\InputParameter\Impl;
 
 use ihde\php\InputParameter\InputParameter_Single;
+use ihde\php\InputParameter\Lang\Instantiable_fromStrings;
 use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
-use ihde\php\InputParameter\Lang\Type_InputParameter_PositiveInt;
+use ihde\php\InputParameter\Lang\Type_PositiveInt;
 use ihde\php\InputParameter\StringParser;
 
 class InputParameter_Single_PositiveInt
     extends InputParameter_Single
-    implements Type_InputParameter_PositiveInt {
+    implements Type_PositiveInt {
     
     protected int $value;
     
@@ -36,11 +37,11 @@ class InputParameter_Single_PositiveInt
     }
     
     /**
-     * @implements Instantiable_KeyValue
+     * @implements Instantiable_fromStrings
      * @inheritDoc
      * @throws \InvalidArgumentException
      */
-    public static function instance_keyValue($key, $value): self {
+    public static function instance_fromStrings(string $key, string $value): self {
         $valueAsInt = StringParser::parse_positiveInt($value);
         $instance = new static($key, $value, $valueAsInt);
         return $instance;

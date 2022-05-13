@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace ihde\php\InputParameter\Lang;
 
-interface Type_InputParameter_String {
+interface Type_PositiveInt {
     
     //marker interface, empty
     
