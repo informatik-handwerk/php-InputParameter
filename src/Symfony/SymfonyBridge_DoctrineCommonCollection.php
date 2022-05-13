@@ -49,10 +49,10 @@ class SymfonyBridge_DoctrineCommonCollection {
      * @throws \LogicException
      * @throws \RuntimeException
      */
-    public function parametersAsCriteria(Input ...$inputs): Criteria {
+    public function inputsAsCriteria(Input ...$inputs): Criteria {
         $criteria = Criteria::create();
         
-        $expression = $this->parametersAsExpression(...$inputs);
+        $expression = $this->inputsAsExpression(...$inputs);
         $criteria->where($expression);
         
         return $criteria;
@@ -64,7 +64,7 @@ class SymfonyBridge_DoctrineCommonCollection {
      * @throws \LogicException
      * @throws \RuntimeException
      */
-    public function parametersAsExpression(Input ...$inputs): Expression {
+    public function inputsAsExpression(Input ...$inputs): Expression {
         $result = $this->andManyToExpression($inputs);
         return $result;
     }
@@ -163,11 +163,11 @@ class SymfonyBridge_DoctrineCommonCollection {
     }
     
     /**
-     * @param InputCollection $param
+     * @param InputCollection $collection
      * @return Expression
      */
-    protected function oneAsExpression_Collection(InputCollection $param): Expression {
-        $items = $param->getAll();
+    protected function oneAsExpression_Collection(InputCollection $collection): Expression {
+        $items = $collection->getAllInputs();
         $result = $this->andManyToExpression($items);
         return $result;
     }
