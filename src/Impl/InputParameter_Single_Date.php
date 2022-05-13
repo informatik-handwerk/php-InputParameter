@@ -5,13 +5,13 @@ declare(strict_types = 1);
 namespace ihde\php\InputParameter\Impl;
 
 use ihde\php\InputParameter\InputParameter_Single;
-use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
-use ihde\php\InputParameter\Lang\Type_InputParameter_Date;
+use ihde\php\InputParameter\Lang\Instantiable_fromStrings;
+use ihde\php\InputParameter\Lang\Type_Date;
 use ihde\php\InputParameter\StringParser;
 
 class InputParameter_Single_Date
     extends InputParameter_Single
-    implements Type_InputParameter_Date {
+    implements Type_Date {
     
     protected \DateTimeImmutable $value;
     
@@ -36,11 +36,11 @@ class InputParameter_Single_Date
     }
     
     /**
-     * @implements Instantiable_KeyValue
+     * @implements Instantiable_fromStrings
      * @inheritDoc
      * @throws \InvalidArgumentException|\Exception
      */
-    public static function instance_keyValue($key, $value): self {
+    public static function instance_fromStrings(string $key, string $value): self {
         $valueAsDate = StringParser::parse_date($value);
         $instance = new static($key, $value, $valueAsDate);
         return $instance;

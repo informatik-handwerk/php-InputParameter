@@ -4,8 +4,11 @@ declare(strict_types = 1);
 
 namespace ihde\php\InputParameter;
 
+use ihde\php\InputParameter\Lang\Form_simple;
+
 abstract class InputParameter_Range
-    extends InputParameter {
+    extends InputParameter
+    implements Form_simple {
     
     protected ?InputParameter_Single $lowerBound;
     protected ?InputParameter_Single $upperBound;

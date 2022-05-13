@@ -5,14 +5,15 @@ declare(strict_types = 1);
 namespace ihde\php\InputParameter\Impl;
 
 use ihde\php\InputParameter\InputParameter;
-use ihde\php\InputParameter\InputParameter_List_CommonNamed;
-use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
-use ihde\php\InputParameter\Lang\Type_InputParameter_PositiveInt;
+use ihde\php\InputParameter\InputParameter_List;
+use ihde\php\InputParameter\Lang\Form_simple;
+use ihde\php\InputParameter\Lang\Instantiable_fromStrings;
+use ihde\php\InputParameter\Lang\Type_PositiveInt;
 use ihde\php\InputParameter\StringParser;
 
 class InputParameter_List_PositiveInt
-    extends InputParameter_List_CommonNamed
-    implements Type_InputParameter_PositiveInt {
+    extends InputParameter_List
+    implements Type_PositiveInt {
     
     /** @var InputParameter_Single_PositiveInt[]|InputParameter_Range_PositiveInt[] $list */
     protected array $list;
@@ -27,7 +28,7 @@ class InputParameter_List_PositiveInt
         $list = [];
         
         foreach ($items as $item) {
-            if ($item instanceof Type_InputParameter_PositiveInt) {
+            if ($item instanceof Form_simple && $item instanceof Type_PositiveInt) {
                 $list[] = $item;
                 continue;
             }
@@ -45,10 +46,10 @@ class InputParameter_List_PositiveInt
             
             if (\is_string($item)) {
                 if (StringParser::containsRange($item)) {
-                    $list[] = InputParameter_Range_PositiveInt::instance_keyValue($name, $item);
+                    $list[] = InputParameter_Range_PositiveInt::instance_fromStrings($name, $item);
                     continue;
                 } else {
-                    $list[] = InputParameter_Single_PositiveInt::instance_keyValue($name, $item);
+                    $list[] = InputParameter_Single_PositiveInt::instance_fromStrings($name, $item);
                     continue;
                 }
             }
@@ -62,18 +63,18 @@ class InputParameter_List_PositiveInt
     }
     
     /**
-     * @implements Instantiable_KeyValue
+     * @implements Instantiable_fromStrings
      * @inheritDoc
      * @throws \InvalidArgumentException
      */
-    public static function instance_keyValue($key, $value): self {
+    public static function instance_fromStrings(string $key, string $value): self {
         $items = StringParser::splitList($value);
         
         $list = \array_map(static function (string $listItem) use ($key): InputParameter {
             if (StringParser::containsRange($listItem)) {
-                return InputParameter_Range_PositiveInt::instance_keyValue($key, $listItem);
+                return InputParameter_Range_PositiveInt::instance_fromStrings($key, $listItem);
             } else {
-                return InputParameter_Single_PositiveInt::instance_keyValue($key, $listItem);
+                return InputParameter_Single_PositiveInt::instance_fromStrings($key, $listItem);
             }
         }, $items);
         

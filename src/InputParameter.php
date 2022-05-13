@@ -4,10 +4,14 @@ declare(strict_types = 1);
 
 namespace ihde\php\InputParameter;
 
-use ihde\php\InputParameter\Lang\Instantiable_KeyValue;
+use ihde\php\InputParameter\Lang\Instantiable_fromStrings;
+use ihde\php\InputParameter\Lang\Instantiable_KeyValue_TRAIT_fromStrings;
 
 abstract class InputParameter
-    implements Instantiable_KeyValue {
+    implements Input,
+               Instantiable_fromStrings {
+    
+    use Instantiable_KeyValue_TRAIT_fromStrings;
     
     protected string $name;
     /** @var ?string|mixed $seed */
