@@ -123,7 +123,7 @@ class SymfonyBridge_ConsoleInput {
         
         $inputs = $collection->getAllParameters();
         foreach ($inputs as $input) {
-            $collector = static::inputParameterToString($input);
+            $collector[] = static::inputParameterToString($input);
         }
         
         $inputParametersByName = \implode(" ", $collector);
