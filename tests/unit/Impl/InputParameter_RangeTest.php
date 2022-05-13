@@ -5,10 +5,10 @@ namespace ihde\php\InputParameter\codeception\Impl;
 use ihde\php\InputParameter\InputParameter_Range;
 use ihde\php\InputParameter\StringParser;
 
-require_once("InputParameter_Test.php");
+require_once("InputParameterTest.php");
 
 abstract class InputParameter_RangeTest
-    extends InputParameter_Test {
+    extends InputParameterTest {
     
     /** @var string|InputParameter_Range */
     public const INPUT_PARAMETER_CLASS = "";

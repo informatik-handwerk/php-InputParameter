@@ -5,10 +5,10 @@ namespace ihde\php\InputParameter\codeception\Impl;
 use ihde\php\InputParameter\InputParameter_List;
 use ihde\php\InputParameter\StringParser;
 
-require_once("InputParameter_Test.php");
+require_once("InputParameterTest.php");
 
 abstract class InputParameter_ListTest
-    extends InputParameter_Test {
+    extends InputParameterTest {
     
     /**
      * @param array $items

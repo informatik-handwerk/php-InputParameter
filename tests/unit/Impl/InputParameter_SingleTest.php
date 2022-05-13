@@ -6,10 +6,10 @@ use ihde\php\InputParameter\Impl\InputParameter_Single_Date;
 use ihde\php\InputParameter\InputParameter;
 use ihde\php\InputParameter\InputParameter_Single;
 
-require_once("InputParameter_Test.php");
+require_once("InputParameterTest.php");
 
 abstract class InputParameter_SingleTest
-    extends InputParameter_Test {
+    extends InputParameterTest {
     
     /**
      * @dataProvider provideInstantiationStrings

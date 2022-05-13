@@ -4,7 +4,7 @@ namespace ihde\php\InputParameter\codeception\Impl;
 
 use ihde\php\InputParameter\InputParameter;
 
-abstract class InputParameter_Test
+abstract class InputParameterTest
     extends \Codeception\Test\Unit {
     
     /** @var string|InputParameter */
