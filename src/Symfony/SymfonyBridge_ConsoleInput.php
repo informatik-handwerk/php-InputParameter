@@ -44,8 +44,7 @@ class SymfonyBridge_ConsoleInput {
         $result = [];
         
         foreach ($map_optionName_transformerClass as $name => $transformerClass) {
-            $inputSupplied = $inputBag->getOption($name);
-            $inputTransformed = static::transform_oneInput($name, $inputSupplied, $transformerClass);
+            $inputTransformed = static::transform_oneOption($name, $inputBag, $transformerClass);
             $result[$name] = $inputTransformed;
         }
         
@@ -56,13 +55,15 @@ class SymfonyBridge_ConsoleInput {
      * Caller is responsible for fetching input and persisting transformed result.
      *
      * @param string                          $name
-     * @param string|array                    $inputSupplied
+     * @param InputInterface                  $inputBag
      * @param string|Instantiable_fromStrings $transformerClass
      * @return InputParameter[]
      * @throws \Exception
      */
-    protected static function transform_oneInput(string $name, $inputSupplied, string $transformerClass): array {
+    protected static function transform_oneOption(string $name, InputInterface $inputBag, string $transformerClass): array {
         assert(\is_a($transformerClass, Instantiable_fromStrings::class, true));
+        
+        $inputSupplied = $inputBag->getOption($name);
         
         if (\is_array($inputSupplied)) {
             $inputTransformed = \array_map(
@@ -92,12 +93,12 @@ class SymfonyBridge_ConsoleInput {
      * @return string
      */
     public static function inputToString(Input $input): string {
-        if ($input instanceof InputCollection) {
-            return static::inputCollectionToString($input);
-        }
-        
         if ($input instanceof InputParameter) {
             return static::inputParameterToString($input);
+        }
+        
+        if ($input instanceof InputCollection) {
+            return static::inputCollectionToString($input);
         }
         
         throw new \TypeError(\get_class($input));
